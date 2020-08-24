@@ -1,0 +1,5 @@
+IF NOT EXISTS(SELECT * FROM sys.schemas WHERE [name] = 'SQLCop')
+BEGIN
+	EXEC sp_executesql N'CREATE SCHEMA SQLCop AUTHORIZATION dbo'
+END
+GO

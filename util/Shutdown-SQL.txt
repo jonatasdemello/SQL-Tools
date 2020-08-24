@@ -1,0 +1,178 @@
+https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/start-stop-pause-resume-restart-sql-server-services?view=sql-server-ver15
+
+Command Prompt Window using net Commands
+
+The Microsoft SQL Server services can be started, stopped, or paused by using Microsoft Windows net commands.
+To start the default instance of the Database Engine
+
+    From a command prompt, enter one of the following commands:
+
+    net start "SQL Server (MSSQLSERVER)"
+
+    -or-
+
+    net start MSSQLSERVER
+
+To start a named instance of the Database Engine
+
+    From a command prompt, enter one of the following commands. Replace <instancename> with the name of the instance you want to manage.
+
+    net start "SQL Server ( instancename )"
+
+    -or-
+
+    net start MSSQL$ instancename
+
+To start the Database Engine with startup options
+
+    Add startup options to the end of the net start "SQL Server (MSSQLSERVER)" statement, separated by a space. When started using net start, startup options use a slash (/) instead of a hyphen (-).
+
+    net start "SQL Server (MSSQLSERVER)" /f /m
+
+    -or-
+
+    net start MSSQLSERVER /f /m
+
+    Note
+
+    For more information about startup options, see Database Engine Service Startup Options.
+
+To start the SQL Server Agent on the default instance of SQL Server
+
+    From a command prompt, enter one of the following commands:
+
+    net start "SQL Server Agent (MSSQLSERVER)"
+
+    -or-
+
+    net start SQLSERVERAGENT
+
+To start the SQL Server Agent on a named instance of SQL Server
+
+    From a command prompt, enter one of the following commands. Replace instancename with the name of the instance you want to manage.
+
+    net start "SQL Server Agent( instancename )"
+
+    -or-
+
+    net start SQLAgent$ instancename
+
+For information about how to run SQL Server Agent in verbose mode for troubleshooting, see sqlagent90 Application.
+To start the SQL Server Browser
+
+    From a command prompt, enter one of the following commands:
+
+    net start "SQL Server Browser"
+
+    -or-
+
+    net start SQLBrowser
+
+To pause or stop services from the Command Prompt window
+
+    To pause or stop services, modify the commands in the following ways.
+
+    To pause a service, replace net start with net pause.
+
+    To stop a service, replace net start with use net stop.
+
+Transact-SQL
+
+The Database Engine can be stopped by using the SHUTDOWN statement.
+To stop the Database Engine using Transact-SQL
+
+    To wait for currently running Transact-SQL statements and stored procedures to finish, and then stop the Database Engine, execute the following statement.
+    SQL
+
+SHUTDOWN;
+
+To stop the Database Engine immediately, execute the following statement.
+SQL
+
+    SHUTDOWN WITH NOWAIT;
+
+For more information about the SHUTDOWN statement, see SHUTDOWN (Transact-SQL).
+PowerShell
+To start and stop Database Engine services
+
+    In a Command Prompt window, start SQL Server PowerShell by executing the following command.
+    cmd
+
+sqlps
+
+At a SQL Server PowerShell command prompt, by executing the following command. Replace computername with the name of your computer.
+PowerShell
+
+# Get a reference to the ManagedComputer class.
+CD SQLSERVER:\SQL\computername
+$Wmi = (get-item .).ManagedComputer
+
+Identify the service that you want to stop or start. Pick one of the following lines. Replace instancename with the name of the named instance.
+
+    To get a reference to the default instance of the Database Engine.
+    PowerShell
+
+$DfltInstance = $Wmi.Services['MSSQLSERVER']
+
+To get a reference to a named instance of the Database Engine.
+PowerShell
+
+$DfltInstance = $Wmi.Services['MSSQL$instancename']
+
+To get a reference to the SQL Server Agent service on the default instance of the Database Engine.
+PowerShell
+
+$DfltInstance = $Wmi.Services['SQLSERVERAGENT']
+
+To get a reference to the SQL Server Agent service on a named instance of the Database Engine.
+PowerShell
+
+$DfltInstance = $Wmi.Services['SQLAGENT$instancename']
+
+To get a reference to the SQL Server Browser service.
+PowerShell
+
+    $DfltInstance = $Wmi.Services['SQLBROWSER']
+
+Complete the example to start and then stop the selected service.
+PowerShell
+
+# Display the state of the service.
+$DfltInstance
+# Start the service.
+$DfltInstance.Start();
+# Wait until the service has time to start.
+# Refresh the cache.  
+$DfltInstance.Refresh();
+# Display the state of the service.
+$DfltInstance
+# Stop the service.
+$DfltInstance.Stop();
+# Wait until the service has time to stop.
+# Refresh the cache.
+$DfltInstance.Refresh();
+# Display the state of the service.
+$DfltInstance
+
+
+
+
+
+
+Manage the SQL Server service on Linux
+To start, stop, or restart an instance of the SQL Server Database Engine
+
+The following shows how to start, stop, restart, and check the status of the SQL Server service on Linux.
+
+Check the status of the SQL Server service using this command:
+Bash
+
+sudo systemctl status mssql-server
+
+You can stop, start, or restart the SQL Server service as needed using the following commands:
+Bash
+
+sudo systemctl stop mssql-server
+sudo systemctl start mssql-server
+sudo systemctl restart mssql-server
+
