@@ -1,3 +1,4 @@
+# Run all scripts
 # C:\Workspace\_code\SQL-cop\SQLCop\Current
 
 
@@ -11,9 +12,6 @@ foreach ($filename in Get-ChildItem -Path $FolderPath -Filter "*.sql") { Invoke-
 
 
 Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Database "SQLCopTests" -Query "EXEC tSQLt.RunAll"
-
-
-
 
 
 foreach ($filename in Get-ChildItem -Path $FolderPath -Filter "*.sql") { Invoke-Sqlcmd -ServerInstance ".\SQLEXPRESS" -Database "SQLCopTests" -InputFile $filename}
