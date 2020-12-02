@@ -1,10 +1,9 @@
-
 -- CREATE DATABASE SQLCopTests
 -- GO
 
 -- ALTER DATABASE SQLCopTests SET TRUSTWORTHY ON
 -- GO
-
+SET NOCOUNT ON;
 
 EXEC sp_configure 'show advanced options', 1;
 RECONFIGURE;
@@ -16,7 +15,6 @@ RECONFIGURE;
 EXEC sp_configure 'clr strict security', 0;
 RECONFIGURE;
 GO
-
 
 DECLARE @cmd NVARCHAR(MAX);
 SET @cmd='ALTER DATABASE ' + QUOTENAME(DB_NAME()) + ' SET TRUSTWORTHY ON;';

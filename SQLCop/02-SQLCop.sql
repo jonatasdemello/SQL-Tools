@@ -3,31 +3,28 @@ SQLCop:
 -------
 	https://github.com/red-gate/SQLCop
 
-
 --	Make sure you have intalled tSQLt.class
 
 */
+SET NOCOUNT ON;
 
 print 'Make sure you have intalled tSQLt.class'
 
 -- if we need to remove everything:
-	EXEC tSQLt.DropClass 'SQLCop';
-	GO
-
+EXEC tSQLt.DropClass 'SQLCop';
+GO
 
 -- this will create the schema [SQLCop]:
-
 EXEC tsqlt.NewTestClass @ClassName = N'SQLCop'
 GO
 
 -- All tests will run in the [SQLCop] schemma
 
-
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Ad hoc distributed queries]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Ad hoc distributed queries]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Ad_hoc_distributed_queries]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Ad_hoc_distributed_queries]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Ad hoc distributed queries]
+CREATE PROCEDURE [SQLCop].[test_Ad_hoc_distributed_queries]
 AS
 BEGIN
     -- Written by George Mastros
@@ -57,11 +54,11 @@ END;
 GO
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Agent Service]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Agent Service]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Agent_Service]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Agent_Service]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Agent Service]
+CREATE PROCEDURE [SQLCop].[test_Agent_Service]
 AS
 BEGIN
     -- Written by George Mastros
@@ -74,14 +71,14 @@ BEGIN
 
     Set @Output = ''
 
-
     If Convert(VarChar(100), ServerProperty('Edition')) Like 'Express%'
       Select @Output = 'SQL Server Agent not installed for express editions'
     Else If Is_SrvRoleMember('sysadmin') = 0
       Select @Output = 'You need to be a member of the sysadmin server role to run this check'
     Else
       Begin
-        SELECT @service = CASE WHEN CHARINDEX('\',@@SERVERNAME)>0
+		-- CHAR(92) = \
+        SELECT @service = CASE WHEN CHARINDEX(CHAR(92),@@SERVERNAME)>0
                THEN N'SQLAgent$'+@@SERVICENAME
                ELSE N'SQLSERVERAGENT' END
 
@@ -96,7 +93,6 @@ BEGIN
         Drop    Table #Temp
       End
 
-
     If @Output > ''
         Begin
             Set @Output = Char(13) + Char(10)
@@ -109,11 +105,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Auto close]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Auto close]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Auto_close]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Auto_close]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Auto close]
+CREATE PROCEDURE [SQLCop].[test_Auto_close]
 AS
 BEGIN
     -- Written by George Mastros
@@ -140,11 +136,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Auto create statistics]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Auto create statistics]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Auto_create_statistics]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Auto_create_statistics]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Auto create statistics]
+CREATE PROCEDURE [SQLCop].[test_Auto_create_statistics]
 AS
 BEGIN
     -- Written by George Mastros
@@ -171,11 +167,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Auto Shrink]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Auto Shrink]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Auto_Shrink]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Auto_Shrink]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Auto Shrink]
+CREATE PROCEDURE [SQLCop].[test_Auto_Shrink]
 AS
 BEGIN
     -- Written by George Mastros
@@ -202,11 +198,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Auto update statistics]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Auto update statistics]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Auto_update_statistics]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Auto_update_statistics]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Auto update statistics]
+CREATE PROCEDURE [SQLCop].[test_Auto_update_statistics]
 AS
 BEGIN
     -- Written by George Mastros
@@ -233,11 +229,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Buffer cache hit ratio]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Buffer cache hit ratio]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Buffer_cache_hit_ratio]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Buffer_cache_hit_ratio]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Buffer cache hit ratio]
+CREATE PROCEDURE [SQLCop].[test_Buffer_cache_hit_ratio]
 AS
 BEGIN
     -- Written by George Mastros
@@ -278,11 +274,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Column collation does not match database default]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Column collation does not match database default]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Column_collation_does_not_match_database_default]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Column_collation_does_not_match_database_default]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Column collation does not match database default]
+CREATE PROCEDURE [SQLCop].[test_Column_collation_does_not_match_database_default]
 AS
 BEGIN
     -- Written by George Mastros
@@ -291,7 +287,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + C.TABLE_SCHEMA + '.' + C.TABLE_NAME + '.' + C.COLUMN_NAME + Char(13) + Char(10)
     FROM    INFORMATION_SCHEMA.COLUMNS C
@@ -317,11 +313,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Column data types (Numeric vs. Int)]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Column data types (Numeric vs. Int)]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Column_data_types_Numeric_vs_Int]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Column_data_types_Numeric_vs_Int]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Column data types (Numeric vs. Int)]
+CREATE PROCEDURE [SQLCop].[test_Column_data_types_Numeric_vs_Int]
 AS
 BEGIN
     -- Written by George Mastros
@@ -357,11 +353,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Column Name Problems]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Column Name Problems]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Column_Name_Problems]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Column_Name_Problems]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Column Name Problems]
+CREATE PROCEDURE [SQLCop].[test_Column_Name_Problems]
 AS
 BEGIN
     -- Written by George Mastros
@@ -370,7 +366,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + TABLE_SCHEMA + '.' + TABLE_NAME + '.' + COLUMN_NAME + Char(13) + Char(10)
     FROM    INFORMATION_SCHEMA.COLUMNS
@@ -392,11 +388,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Columns of data type Text/nText]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Columns of data type Text/nText]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Columns_of_data_type_Text/nText]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Columns_of_data_type_Text/nText]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Columns of data type Text/nText]
+CREATE PROCEDURE [SQLCop].[test_Columns_of_data_type_Text/nText]
 AS
 BEGIN
     -- Written by George Mastros
@@ -405,7 +401,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + SCHEMA_NAME(o.uid) + '.' + o.Name + '.' + col.name + Char(13) + Char(10)
     from    syscolumns col
@@ -433,11 +429,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Columns with float data type]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Columns with float data type]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Columns_with_float_data_type]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Columns_with_float_data_type]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Columns with float data type]
+CREATE PROCEDURE [SQLCop].[test_Columns_with_float_data_type]
 AS
 BEGIN
     -- Written by George Mastros
@@ -446,7 +442,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + TABLE_SCHEMA + '.' + TABLE_NAME + '.' + COLUMN_NAME + Char(13) + Char(10)
     FROM    INFORMATION_SCHEMA.COLUMNS
@@ -468,11 +464,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Columns with image data type]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Columns with image data type]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Columns_with_image_data_type]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Columns_with_image_data_type]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Columns with image data type]
+CREATE PROCEDURE [SQLCop].[test_Columns_with_image_data_type]
 AS
 BEGIN
     -- Written by George Mastros
@@ -481,7 +477,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + SCHEMA_NAME(o.uid) + '.' + o.Name + '.' + col.name
     from    syscolumns col
@@ -509,11 +505,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Compatibility Level]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Compatibility Level]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Compatibility_Level]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Compatibility_Level]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Compatibility Level]
+CREATE PROCEDURE [SQLCop].[test_Compatibility_Level]
 AS
 BEGIN
     -- Written by George Mastros
@@ -542,11 +538,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Database and Log files on the same disk]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Database and Log files on the same disk]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Database_and_Log_files_on_the_same_disk]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Database_and_Log_files_on_the_same_disk]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Database and Log files on the same disk]
+CREATE PROCEDURE [SQLCop].[test_Database_and_Log_files_on_the_same_disk]
 AS
 BEGIN
     -- Written by George Mastros
@@ -574,11 +570,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Database collation]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Database collation]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Database_collation]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Database_collation]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Database collation]
+CREATE PROCEDURE [SQLCop].[test_Database_collation]
 AS
 BEGIN
     -- Written by George Mastros
@@ -605,11 +601,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Database Mail]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Database Mail]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Database_Mail]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Database_Mail]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Database Mail]
+CREATE PROCEDURE [SQLCop].[test_Database_Mail]
 AS
 BEGIN
     -- Written by George Mastros
@@ -638,11 +634,11 @@ BEGIN
 
 END;
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Decimal Size Problem]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Decimal Size Problem]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Decimal_Size_Problem]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Decimal_Size_Problem]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Decimal Size Problem]
+CREATE PROCEDURE [SQLCop].[test_Decimal_Size_Problem]
 AS
 BEGIN
     -- Written by George Mastros
@@ -676,11 +672,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Forwarded Records]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Forwarded Records]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Forwarded_Records]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Forwarded_Records]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Forwarded Records]
+CREATE PROCEDURE [SQLCop].[test_Forwarded_Records]
 AS
 BEGIN
     -- Written by George Mastros
@@ -689,7 +685,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     If Exists(Select compatibility_level from sys.databases Where database_id = db_ID() And compatibility_level > 80)
         Begin
@@ -728,11 +724,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Fragmented Indexes]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Fragmented Indexes]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Fragmented_Indexes]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Fragmented_Indexes]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Fragmented Indexes]
+CREATE PROCEDURE [SQLCop].[test_Fragmented_Indexes]
 AS
 BEGIN
     -- Written by George Mastros
@@ -741,7 +737,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     Create Table #Result (ProblemItem VarChar(1000))
 
@@ -778,11 +774,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Instant File Initialization]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Instant File Initialization]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Instant_File_Initialization]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Instant_File_Initialization]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Instant File Initialization]
+CREATE PROCEDURE [SQLCop].[test_Instant_File_Initialization]
 AS
 BEGIN
     -- Written by George Mastros
@@ -791,7 +787,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     CREATE TABLE #Output(Value VarChar(8000))
 
@@ -831,17 +827,11 @@ BEGIN
 END;
 go
 
-IF EXISTS
-(
-    SELECT *
-    FROM sys.objects
-    WHERE object_id = OBJECT_ID(N'[SQLCop].[test Invalid Objects]')
-          AND type IN ( N'P', N'PC' )
-)
-    DROP PROCEDURE [SQLCop].[test Invalid Objects]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Invalid_Objects]') AND type IN ( N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Invalid_Objects]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Invalid Objects]
+CREATE PROCEDURE [SQLCop].[test_Invalid_Objects]
 AS
 BEGIN
     --  Test to identify Invalid Stored Procedures and Views
@@ -857,7 +847,7 @@ BEGIN
     -- Declare and set output
 
     DECLARE @Output VARCHAR(MAX);
-    SET @Output = '';
+    Set @Output = '';
 
     -- Act
     -- Fetch all invalid objects from sys.sql_expression_dpenedencies and write to output
@@ -894,11 +884,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Login Language]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Login Language]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Login_Language]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Login_Language]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Login Language]
+CREATE PROCEDURE [SQLCop].[test_Login_Language]
 AS
 BEGIN
     -- Written by George Mastros
@@ -935,11 +925,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Max degree of parallelism]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Max degree of parallelism]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Max_degree_of_parallelism]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Max_degree_of_parallelism]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Max degree of parallelism]
+CREATE PROCEDURE [SQLCop].[test_Max_degree_of_parallelism]
 AS
 BEGIN
     -- Written by George Mastros
@@ -979,11 +969,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Missing Foreign Key Indexes]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Missing Foreign Key Indexes]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Missing_Foreign_Key_Indexes]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Missing_Foreign_Key_Indexes]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Missing Foreign Key Indexes]
+CREATE PROCEDURE [SQLCop].[test_Missing_Foreign_Key_Indexes]
 AS
 BEGIN
     -- Written by George Mastros
@@ -992,7 +982,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     If Exists(Select 1 From fn_my_permissions(NULL, 'DATABASE') WHERE permission_name = 'VIEW DATABASE STATE')
         SELECT  @Output = @Output + Convert(VarChar(300), fk.foreign_key_name) + Char(13) + Char(10)
@@ -1083,11 +1073,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Missing Foreign Keys]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Missing Foreign Keys]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Missing_Foreign_Keys]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Missing_Foreign_Keys]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Missing Foreign Keys]
+CREATE PROCEDURE [SQLCop].[test_Missing_Foreign_Keys]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1099,7 +1089,7 @@ BEGIN
     DECLARE @AcceptableSymbols VARCHAR(100)
 
     SET @AcceptableSymbols = '_$'
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + C.TABLE_SCHEMA + '.' + C.TABLE_NAME + '.' + C.COLUMN_NAME + Char(13) + Char(10)
     FROM    INFORMATION_SCHEMA.COLUMNS C
@@ -1130,11 +1120,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Old Backups]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Old Backups]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Old_Backups]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Old_Backups]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Old Backups]
+CREATE PROCEDURE [SQLCop].[test_Old_Backups]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1168,11 +1158,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Ole Automation Procedures]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Ole Automation Procedures]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Ole_Automation_Procedures]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Ole_Automation_Procedures]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Ole Automation Procedures]
+CREATE PROCEDURE [SQLCop].[test_Ole_Automation_Procedures]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1201,11 +1191,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Orphaned Users]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Orphaned Users]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Orphaned_Users]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Orphaned_Users]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Orphaned Users]
+CREATE PROCEDURE [SQLCop].[test_Orphaned_Users]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1244,11 +1234,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Page life expectancy]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Page life expectancy]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Page_life_expectancy]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Page_life_expectancy]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Page life expectancy]
+CREATE PROCEDURE [SQLCop].[test_Page_life_expectancy]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1313,11 +1303,11 @@ BEGIN
     RETURN @Result
 END
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Procedures Named SP_]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Procedures Named SP_]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Procedures_Named_SP]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Procedures_Named_SP]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Procedures Named SP_]
+CREATE PROCEDURE [SQLCop].[test_Procedures_Named_SP]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1348,11 +1338,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Procedures that call undocumented procedures]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Procedures that call undocumented procedures]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Procedures_that_call_undocumented_procedures]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Procedures_that_call_undocumented_procedures]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Procedures that call undocumented procedures]
+CREATE PROCEDURE [SQLCop].[test_Procedures_that_call_undocumented_procedures]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1453,11 +1443,11 @@ BEGIN
         End
 END;
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Procedures using dynamic SQL without sp_executesql]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Procedures using dynamic SQL without sp_executesql]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Procedures_using_dynamic_SQL_without_sp_executesql]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Procedures_using_dynamic_SQL_without_sp_executesql]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Procedures using dynamic SQL without sp_executesql]
+CREATE PROCEDURE [SQLCop].[test_Procedures_using_dynamic_SQL_without_sp_executesql]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1493,11 +1483,11 @@ BEGIN
 
 END;
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Procedures with @@Identity]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Procedures with @@Identity]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Procedures_with_Identity]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Procedures_with_Identity]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Procedures with @@Identity]
+CREATE PROCEDURE [SQLCop].[test_Procedures_with_Identity]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1531,11 +1521,11 @@ BEGIN
 
 END;
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Procedures With SET ROWCOUNT]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Procedures With SET ROWCOUNT]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Procedures_With_SET_ROWCOUNT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Procedures_With_SET_ROWCOUNT]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Procedures With SET ROWCOUNT]
+CREATE PROCEDURE [SQLCop].[test_Procedures_With_SET_ROWCOUNT]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1569,11 +1559,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Procedures without SET NOCOUNT ON]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Procedures without SET NOCOUNT ON]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Procedures_without_SET_NOCOUNT_ON]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Procedures_without_SET_NOCOUNT_ON]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Procedures without SET NOCOUNT ON]
+CREATE PROCEDURE [SQLCop].[test_Procedures_without_SET_NOCOUNT_ON]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1608,11 +1598,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Service Account]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Service Account]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Service_Account]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Service_Account]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Service Account]
+CREATE PROCEDURE [SQLCop].[test_Service_Account]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1652,11 +1642,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Table name problems]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Table name problems]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Table_name_problems]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Table_name_problems]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Table name problems]
+CREATE PROCEDURE [SQLCop].[test_Table_name_problems]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1669,7 +1659,7 @@ BEGIN
 
     --SET @AcceptableSymbols = '_$'
     SET @AcceptableSymbols = '0-9_$' -- we allow numbers!
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + TABLE_SCHEMA + '.' + TABLE_NAME + Char(13) + Char(10)
     FROM    INFORMATION_SCHEMA.TABLES
@@ -1690,11 +1680,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Tables that start with tbl]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Tables that start with tbl]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Tables_that_start_with_tbl]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Tables_that_start_with_tbl]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Tables that start with tbl]
+CREATE PROCEDURE [SQLCop].[test_Tables_that_start_with_tbl]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1703,7 +1693,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + TABLE_SCHEMA + '.' + TABLE_NAME + Char(13) + Char(10)
     From    INFORMATION_SCHEMA.TABLES
@@ -1725,11 +1715,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Tables without a primary key]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Tables without a primary key]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Tables_without_a_primary_key]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Tables_without_a_primary_key]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Tables without a primary key]
+CREATE PROCEDURE [SQLCop].[test_Tables_without_a_primary_key]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1739,7 +1729,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + QUOTENAME(AllTables.schemaName) + '.' + QUOTENAME(AllTables.name) + Char(13) + Char(10)
     FROM    (
@@ -1770,11 +1760,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Tables without any data]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Tables without any data]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Tables_without_any_data]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Tables_without_any_data]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Tables without any data]
+CREATE PROCEDURE [SQLCop].[test_Tables_without_any_data]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1783,7 +1773,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + QUOTENAME(SCHEMA_NAME(t.schema_id)) + '.' + QUOTENAME(t.name) + Char(13) + Char(10)
     FROM    sys.tables t JOIN sys.dm_db_partition_stats p ON t.object_id=p.object_id
@@ -1803,11 +1793,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test UniqueIdentifier with NewId]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test UniqueIdentifier with NewId]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_UniqueIdentifier_with_NewId]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_UniqueIdentifier_with_NewId]
 GO
 
-CREATE PROCEDURE [SQLCop].[test UniqueIdentifier with NewId]
+CREATE PROCEDURE [SQLCop].[test_UniqueIdentifier_with_NewId]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1816,7 +1806,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + so.name + '.' + col.name + Char(13) + Char(10)
     FROM    sysobjects so
@@ -1853,11 +1843,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Unnamed Constraints]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Unnamed Constraints]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Unnamed_Constraints]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Unnamed_Constraints]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Unnamed Constraints]
+CREATE PROCEDURE [SQLCop].[test_Unnamed_Constraints]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1866,7 +1856,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     SELECT  @Output = @Output + CONSTRAINT_SCHEMA + '.' + CONSTRAINT_NAME + Char(13) + Char(10)
     From    INFORMATION_SCHEMA.CONSTRAINT_TABLE_USAGE
@@ -1889,11 +1879,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test User Aliases]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test User Aliases]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_User_Aliases]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_User_Aliases]
 GO
 
-CREATE PROCEDURE [SQLCop].[test User Aliases]
+CREATE PROCEDURE [SQLCop].[test_User_Aliases]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1922,11 +1912,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Varchar Size Problem]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Varchar Size Problem]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Varchar_Size_Problem]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Varchar_Size_Problem]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Varchar Size Problem]
+CREATE PROCEDURE [SQLCop].[test_Varchar_Size_Problem]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1967,11 +1957,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test Wide Table]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test Wide Table]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_Wide_Table]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_Wide_Table]
 GO
 
-CREATE PROCEDURE [SQLCop].[test Wide Table]
+CREATE PROCEDURE [SQLCop].[test_Wide_Table]
 AS
 BEGIN
     -- Written by George Mastros
@@ -1980,7 +1970,7 @@ BEGIN
     SET NOCOUNT ON
 
     DECLARE @Output VarChar(max)
-    SET @Output = ''
+    Set @Output = ''
 
     Select  @Output = @Output + C.TABLE_SCHEMA + '.' + C.TABLE_NAME + Char(13) + Char(10)
     From    INFORMATION_SCHEMA.TABLES T
@@ -2008,11 +1998,11 @@ BEGIN
 END;
 
 GO
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test xp_cmdshell is enabled]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [SQLCop].[test xp_cmdshell is enabled]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[SQLCop].[test_xp_cmdshell_is_enabled]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [SQLCop].[test_xp_cmdshell_is_enabled]
 GO
 
-CREATE PROCEDURE [SQLCop].[test xp_cmdshell is enabled]
+CREATE PROCEDURE [SQLCop].[test_xp_cmdshell_is_enabled]
 AS
 BEGIN
     -- Written by George Mastros

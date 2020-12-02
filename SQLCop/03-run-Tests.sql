@@ -1,6 +1,5 @@
 SET NOCOUNT ON;
 
-
 -- All tests will run in the [SQLCop] schemma
 
 EXEC tSQLt.RunAll
