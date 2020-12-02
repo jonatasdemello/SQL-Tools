@@ -1,0 +1,9 @@
+---Build+
+GO
+DECLARE @cmd NVARCHAR(MAX) = '';
+SET @cmd = @cmd + --<-- force NVARCHAR(MAX)
+'CREATE ASSEMBLY [tSQLtCLR] AUTHORIZATION [dbo] FROM '+
+'0x000000'+
+' WITH PERMISSION_SET = SAFE;';
+EXEC(@cmd);
+GO
