@@ -1,0 +1,87 @@
+
+https://www.sentryone.com/
+
+
+
+https://www.brentozar.com/blitzcache/unused-memory-grants/
+https://www.brentozar.com/archive/2017/02/memory-grants-data-size/
+https://www.brentozar.com/blitzcache/
+
+https://www.brentozar.com/blitz/poison-wait-detected/
+https://www.brentozar.com/archive/2010/06/sargable-why-string-is-slow/
+https://www.brentozar.com/archive/2014/04/sql-2014-cardinality-estimator-eats-bad-tsql-breakfast/
+https://www.brentozar.com/archive/2017/02/memory-grants-data-size/
+
+
+
+https://sqlperformance.com/2020/02/azure/sql-managed-instance-performance-considerations
+https://azure.microsoft.com/en-ca/blog/key-causes-of-performance-differences-between-sql-managed-instance-and-sql-server/
+
+
+In-Memory OLTP and Memory-Optimization
+https://docs.microsoft.com/en-us/sql/relational-databases/in-memory-oltp/in-memory-oltp-in-memory-optimization?view=sql-server-ver15
+
+https://docs.microsoft.com/en-us/sql/relational-databases/in-memory-oltp/faster-temp-table-and-table-variable-by-using-memory-optimization?view=sql-server-ver15
+https://docs.microsoft.com/en-us/sql/relational-databases/in-memory-oltp/monitoring-performance-of-natively-compiled-stored-procedures?view=sql-server-ver15
+
+https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview#vcore-based-purchasing-model
+https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/resource-limits#hardware-generation-characteristics
+
+https://docs.microsoft.com/en-us/azure/azure-sql/database/monitor-tune-overview
+https://docs.microsoft.com/en-us/azure/azure-sql/database/database-advisor-implement-performance-recommendations
+
+https://docs.microsoft.com/en-us/sql/relational-databases/in-memory-oltp/monitoring-performance-of-natively-compiled-stored-procedures?view=sql-server-ver15
+
+
+Indexes types
+	https://docs.microsoft.com/en-us/sql/relational-databases/indexes/indexes?view=sql-server-2017&WT.mc_id=Portal-Microsoft_Azure_Support
+
+	https://techcommunity.microsoft.com/t5/azure-database-support-blog/how-to-maintain-azure-sql-indexes-and-statistics/ba-p/368787
+
+
+https://github.com/Microsoft/tigertoolbox/tree/master/MaintenanceSolution
+
+
+
+kusto queries
+	https://docs.microsoft.com/en-us/azure/data-explorer/kusto/concepts/
+	https://docs.microsoft.com/en-us/azure/data-explorer/kusto/query/tutorial?pivots=azuredataexplorer
+
+
+
+Unused Memory Grants
+https://www.brentozar.com/blitzcache/unused-memory-grants/
+
+They most frequently happen when parameter sniffing occurs 
+and a plan is in cache that expects lots of rows back that gets reused by queries 
+that don’t bring a lot of rows back. 
+They can also happen when cardinality estimates go awry, 
+because of overly complicated WHERE clauses and JOINs, 
+or if you’re writing non-SARGable queries that use functions in the WHERE or JOIN of your query.
+
+Start with RAM. If you need more, this is a cheap and easy fix, especially if your server is running with less than 64/128 GB of RAM.
+
+Next, try tuning your queries. Break complicated code out into more easily optimized chunks, and make sure your queries are SARGable.
+
+If you’re on SQL Server 2012 SP3, 2014 SP2, or 2016, you have the MIN_GRANT_PERCENT and MAX_GRANT_PERCENT hints to manage memory grants at the query level.
+
+For earlier versions, you can try Resource Governor if you’re on Enterprise Edition.
+
+
+
+Follow the steps here below to uninstall Google Chrome:
+1. Go to your software list, and uninstall Google Chrome from the list
+http://windows.microsoft.com/en-us/windows/uninstall-change-program#uninstall-change-program=windows-7
+2. Go to this location:
+C:\Users\YOUNAME\AppData\Local\Google\
+C:\Program Files (x86)\Google\
+3. And delete that "Chrome" folder (for both location, if there is a Chrome folder)
+
+
+StartComponentCleanup
+schtasks.exe /Run /TN "\Microsoft\Windows\Servicing\StartComponentCleanup"
+Dism.exe /online /Cleanup-Image /StartComponentCleanup
+Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
+Dism.exe /online /Cleanup-Image /SPSuperseded
+
+

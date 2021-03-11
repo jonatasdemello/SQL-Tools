@@ -1,0 +1,65 @@
+-- https://docs.microsoft.com/en-us/sql/relational-databases/system-tables/mapping-system-tables-to-system-views-transact-sql?view=sql-server-ver15
+
+Mapping System Tables to System Views (Transact-SQL)
+This topic shows the mapping between the system tables and functions and system views and functions.
+
+Table 1
+The following table maps the system tables to their corresponding system views or functions in SQL Server 2019 (15.x).
+
+Table 2
+The following table maps the system tables or functions that are in every database in SQL Server 2000 (8.x)
+to their corresponding system views or functions in SQL Server 2019 (15.x).
+
+
+System table       | System views or functions                 | Type of view or function
+--------------------------------------------------------------------------------------
+sysaltfiles        | sys.master_files                          | Catalog view
+syscacheobjects    | sys.dm_exec_cached_plans                  | Dynamic management view
+syscacheobjects    | sys.dm_exec_plan_attributes (Transact-SQL)| Dynamic management view
+syscacheobjects    | sys.dm_exec_sql_text                      | Dynamic management view
+syscacheobjects    | sys.dm_exec_cached_plan_dependent_objects | Dynamic management view
+syscharsets        | sys.syscharsets                           | Compatibility view
+sysconfigures      | sys.configurations                        | Catalog view
+syscurconfigs      | sys.configurations                        | Catalog view
+sysdatabases       | sys.databases                             | Catalog view
+sysdevices         | sys.backup_devices                        | Catalog view
+syslanguages       | sys.syslanguages                          | Compatibility view
+syslockinfo        | sys.dm_tran_locks                         | Dynamic management view
+syslocks           | sys.dm_tran_locks                         | Dynamic management view
+syslogins          | sys.server_principals                     | Catalog view
+syslogins          | sys.sql_logins                            |
+sysmessages        | sys.messages                              | Catalog view
+sysoledbusers      | sys.linked_logins                         | Catalog view
+sysopentapes       | sys.dm_io_backup_tapes                    | Dynamic management view
+sysperfinfo        | sys.dm_os_performance_counters            | Dynamic management view
+sysprocesses       | sys.dm_exec_connections                   | Dynamic management view
+sysprocesses       | sys.dm_exec_sessions                      | Dynamic management view
+sysprocesses       | sys.dm_exec_requests                      | Dynamic management view
+sysremotelogins    | sys.remote_logins                         | Catalog view
+sysservers         | sys.servers                               | Catalog view
+fn_virtualfilestats| sys.dm_io_virtual_file_stats              | Dynamic management view
+syscolumns         | sys.columns                               | Catalog view
+syscomments        | sys.sql_modules                           | Catalog view
+sysconstraints     | sys.check_constraints                     | Catalog view
+sysconstraints     | sys.default_constraints                   | Catalog view
+sysconstraints     | sys.key_constraints                       | Catalog view
+sysconstraints     | sys.foreign_keys                          | Catalog view
+sysdepends         | sys.sql_expression_dependencies           | Catalog view
+sysfilegroups      | sys.filegroups                            | Catalog view
+sysfiles           | sys.database_files                        | Catalog view
+sysforeignkeys     | sys.foreign_key_columns                   | Catalog view
+sysindexes         | sys.indexes                               | Catalog view
+sysindexes         | sys.partitions                            | Catalog view
+sysindexes         | sys.allocation_units                      | Catalog view
+sysindexes         | sys.dm_db_partition_stats                 | Dynamic management view
+sysindexkeys       | sys.index_columns                         | Catalog view
+sysmembers         | sys.database_role_members                 | Catalog view
+sysobjects         | sys.objects                               | Catalog view
+syspermissions     | sys.database_permissions                  | Catalog view
+syspermissions     | sys.server_permissions                    | Catalog view
+sysprotects        | sys.database_permissions                  | Catalog view
+sysprotects        | sys.server_permissions                    | Catalog view
+sysreferences      | sys.foreign_keys                          | Catalog view
+systypes           | sys.types                                 | Catalog view
+sysusers           | sys.database_principals                   | Catalog view
+sysfulltextcatalogs| sys.fulltext_catalogs                     | Catalog view

@@ -1,0 +1,218 @@
+Pivot
+https://sqlperformance.com/2019/09/t-sql-queries/t-sql-pitfalls-pivoting-unpivoting
+
+Merge
+	Merge has had many deadlock issues: 
+	https://www.mssqltips.com/sqlservertip/3074/use-caution-with-sql-servers-merge-statement/
+
+Scripts:
+
+# SQL Server First Responder Kit ***
+https://github.com/BrentOzarULTD/SQL-Server-First-Responder-Kit
+
+# SQL Server Maintenance Solution ***
+https://ola.hallengren.com/
+
+Performance Tips:
+	https://www.sqlshack.com/query-optimization-techniques-in-sql-server-tips-and-tricks/
+
+Jmeter
+	# https://jmeter.apache.org/usermanual/build-db-test-plan.html
+	https://medium.com/@ganeshsirsi/database-performance-and-load-testing-using-jmeter-ms-sql-470045303785
+
+JDBC
+	https://docs.microsoft.com/en-us/sql/connect/jdbc/download-microsoft-jdbc-driver-for-sql-server?view=sql-server-2017
+
+
+	https://www.brentozar.com/training/
+	https://www.brentozar.com/archive/2019/04/free-sql-server-load-testing-tools/
+
+------------------------------------------------------------------------------------------	
+# Single-Query Load Tests
+	These tools let you write a query, and then run that query lots of times to stress load. 
+	Of course, this doesn’t really mimic production workloads, 
+	which will run lots of different queries concurrently. 
+	You can kinda mimic that with my technique to call random queries from a stored procedure,
+	but even with that, we’re talking about a pretty low-tech technique here.
+------------------------------------------------------------------------------------------
+
+SQLQueryStress
+	graphical utility originally written by Adam Machanic, and now maintained by Erik Ejlskov Jensen. 
+	I find this way easier to use, but it’s also slower than OStress. 
+	When you have a really well-tuned workload that returns hundreds or thousands of rows per query, 
+	it’s not unusual to hit ASYNC_NETWORK_IO waits with SQLQueryStress when it’s unable to keep up with digesting the results, 
+	something I don’t see as often with OStress.
+
+	https://github.com/ErikEJ/SqlQueryStress/wiki
+	https://github.com/ErikEJ/SqlQueryStress
+	https://www.brentozar.com/archive/2015/05/how-to-fake-load-tests-with-sqlquerystress/
+	http://dataeducation.com/sqlquerystress-the-source-code/
+	https://www.mssqltips.com/sqlservertip/2730/sql-query-stress-tool/
+	https://blog.sqlauthority.com/2016/12/21/sql-server-testing-database-performance-tsqlt-sqlquerystress/
+
+
+Microsoft RML Utilities and OStress
+	 very barebones command line tool that lets you run a query across a number of sessions, for a number of threads. 
+	 No graphical user interface here – it’s very stripped-down and non-intuitive, 
+	 but that’s also kind of the draw: it’s fast and simple.
+	 
+	Replay Markup Language - RML Utilities for SQL Server (x64) CU4 
+	https://www.microsoft.com/en-us/download/details.aspx?id=4511
+	https://support.microsoft.com/en-ca/help/944837/description-of-the-replay-markup-language-rml-utilities-for-sql-server
+		
+	https://www.sqlshack.com/sql-server-stress-testing-using-ostress/
+	https://www.brentozar.com/archive/2017/02/simulating-workload-ostress-agent-jobs/
+
+	https://www.sqlservercentral.com/blogs/sql-server-stress-testing-using-ostress-%E2%80%93-rml-utilities
+	
+------------------------------------------------------------------------------------------	
+# Load Replay Tests
+	These tools capture a workload (either from production, or from a group of users clicking around in dev/QA), 
+	and then help you replay that same workload again and again, 
+	either on the same SQL Server or different servers.
+------------------------------------------------------------------------------------------
+
+WorkloadTools - SqlWorkload 
+	Gianluca Sartori’s command line tools to collect a workload (either with tracing or XE), 
+	analyze the data, and replay the workload in real time. 
+	If I was a full time DBA in charge of SQL Server load testing at a company, this would be the one I’d start with.
+
+	is a command line tool to start workload collection, 
+	analyze the collected data and replay the workload to a target machine, all in real-time.
+
+	https://github.com/spaghettidba/WorkloadTools/wiki
+	https://github.com/spaghettidba/WorkloadTools
+	https://spaghettidba.com/tag/workloadtools/
+
+
+HammerDB
+	can be used either to run a standard synthetic workload (like a TPC benchmark), or your own custom queries. 
+	This one can test not only SQL Server, but also MySQL, Oracle, PostgreSQL, and more. 
+	I would only go down this road if I was a performance tuning specialist in a large company with lots of databases – this thing is really specialized.
+	
+	https://cloud.google.com/compute/docs/tutorials/load-testing-sql-server-hammerdb
+	https://www.hammerdb.com/about.html
+	https://github.com/TPC-Council/HammerDB
+
+
+
+Microsoft Distributed Replay
+	https://docs.microsoft.com/en-us/sql/tools/distributed-replay/sql-server-distributed-replay?view=sql-server-2017
+	– this tool aimed to solve Profiler’s weaknesses by capturing a Profiler-style trace, 
+	but then replaying that trace in a coordinated fashion across multiple load test servers, all aimed at the same SQL Server. 
+	Before you go too far down this road, watch Gail Shaw’s Pluralsight course on it, and read the tales of woe in the Microsoft forums. 
+	The learning curve on this is pretty steep – think days and weeks of setup & experimentation time to get this working really well, not hours.
+
+Microsoft Database Experimentation Assistant
+	https://docs.microsoft.com/en-us/sql/dea/database-experimentation-assistant-overview?view=sql-server-2017
+	– this builds atop Distributed Replay to let you run A/B tests with different server settings, indexes, 
+	even SQL Server versions, and then tells you which queries got better (and which ones got worse.) 
+	The drawback here is that you gotta get Distributed Replay working before you can progress to this point.
+
+
+
+------------------------------------------------------------------------------------------
+"C:\Program Files\Microsoft Corporation\RMLUtils\ostress.exe" --Path to ostress executable
+	-SNADAULTRA\SQL2016C --Server name (note that this is how you access a named instance)
+	-d"StackOverflow" --Database name
+	-n10 --How many simultaneous sessions you want to run your query
+	-r5 --How many iterations they should each perform
+	-q --Quiet mode; doesn't return rows
+	-Q"EXEC dbo.GenerateReads" --Query you want to run
+	-o"C:\temp\crap2" --Logging folder
+
+	-i"C:\temp\BeatUpStack.sql"
+
+	USAGE:
+	  -S name of Microsoft SQL Server server to connect to
+	  -D ODBC data source name to use for connection
+	  -E use Windows auhentication to connect (default)
+	  -U login ID
+	  -P password
+	  -d database name
+	  -Q"single batch query to process"
+	  -i SQL/RML file name or file wildcard to process
+	  -n number of connections processing each input file/query - stress mode
+	  -r number of iterations for each connection to execute its input file/query
+	  -o output directory to write query results and log file
+	  -l login timeout (sec)
+	  -L integer value representing the language id
+	  -t query timeout (sec)
+	  -p network packet size for connections - SQL Server only
+	  -q quiet mode; suppress all query output
+	  -v verbose mode; show additional diagnostic output
+	  -m [stress | replay] run in stress or replay mode
+	  -a default password to use for SQL authentication during replay
+	  -c control file name - required for replay mode
+	  -T enable trace flag
+	  -fx write query results as XML
+	  -N disable "OSTRESS exiting" message
+	  -M Advanced setting: max threads allowed, 0 is default setting.
+	  -b Stop processing if an error is encountered during query execution.
+
+	EXAMPLE: ostress -E -dpubs -Q"select * from authors"
+
+
+SQL Azure performance:
+	https://azure.microsoft.com/en-ca/blog/key-causes-of-performance-differences-between-sql-managed-instance-and-sql-server/
+
+Azure
+	https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview
+
+	https://docs.microsoft.com/en-us/sql/t-sql/functions/datediff-transact-sql?view=sql-server-ver15
+	https://www.sqlservercentral.com/blogs/measuring-sql-query-performance
+	https://www.sqlservercentral.com/articles/getting-comfortable-writing-code-in-azure-data-studio
+	https://mode.com/sql-tutorial/sql-performance-tuning/
+
+
+
+https://www.sqlservercentral.com/blogs/measuring-sql-query-performance
+
+https://docs.microsoft.com/en-us/sql/relational-databases/performance/monitoring-performance-by-using-the-query-store?view=sql-server-2017
+
+https://stackoverflow.com/questions/1788678/sql-sub-query-or-inner-join
+
+JOIN IS FASTER THAN SUBQUERY.
+
+subquery makes for busy disk access, think of hard disk's read-write needle(head?) that goes back and forth when it access: 
+User, SearchExpression, PageSize, DrilldownPageSize, User, SearchExpression, PageSize, DrilldownPageSize, User... and so on.
+
+join works by concentrating the operation on the result of the first two tables, any subsequent joins would concentrate 
+joining on the in-memory(or cached to disk) result of the first joined tables, and so on. less read-write needle movement, thus faster
+
+https://blog.sqlauthority.com/2010/06/05/sql-server-convert-in-to-exists-performance-talk/
+https://blog.sqlauthority.com/2010/06/06/sql-server-subquery-or-join-various-options-sql-server-engine-knows-the-best/
+
+
+*** SQL: Fastest way to insert new records where one doesn’t already exist
+http://cc.davelozinski.com/sql/fastest-way-to-insert-new-records-where-one-doesnt-already-exist
+
+EXCEPT and INTERSECT 
+https://docs.microsoft.com/en-us/sql/t-sql/language-elements/set-operators-except-and-intersect-transact-sql?view=sql-server-ver15
+
+SARable
+https://www.sqlshack.com/how-to-use-sargable-expressions-in-t-sql-queries-performance-advantages-and-examples/
+https://www.red-gate.com/simple-talk/sql/t-sql-programming/ten-common-sql-programming-mistakes/
+
+--sps to fix: Student.MatchMakerCarersSave
+-- PcsProgress.SaveProgressAsync
+-- PcsExercise.SaveInputAsync
+-- PcsExercise.ResetlessonAsync
+
+Tools >> Options >> Query Results > SQL Server >> Results to Grid >> Discard Results After Query Execution
+Query > Query Options > Results > Grid > Discard results after execution
+
+https://blog.sqlauthority.com/2012/07/01/sql-server-discard-results-after-query-execution-ssms/
+
+I often enable this option when I am doing performance tuning exercise. During performance tuning exercise when I am working with execution plans and do not need results to verify every time or when I am tuning Indexes and its effect on execution plan I do not need the results. In this kind of situations I do keep this option on and discard the results. It always helps me big time as in most of the performance tuning exercise I am dealing with huge amount of the data and dealing with this data can be expensive.
+
+Please note that this option does not reduce IO or CPU usage for SQL Server. It just discards the results after execution and a good help for debugging on the development server.
+
+BOL Page: http://msdn.microsoft.com/en-us/library/ms190144(SQL.110).aspx
+
+Discard result after query executes
+Frees memory by discarding the query results after the screen display has received them.
+
+-- This only return the columns (result structure) no data
+SET FMTONLY ON;
+SET FMTONLY OFF;

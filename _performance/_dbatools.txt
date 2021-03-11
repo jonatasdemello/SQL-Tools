@@ -1,0 +1,68 @@
+https://sqldbawithabeard.com/2017/04/10/export-sql-user-permissions-to-t-sql-script-using-powershell-and-dbatools/
+
+-- All users
+Export-SqlUser -SqlInstance SQL2016N2 -FilePath C:\temp\SQL2016N2-Users.sql
+Notepad C:\temp\SQL2016N2-Users.sql
+
+-- Single DB
+Export-SqlUser -SqlInstance SQL2016N2 -FilePath C:\temp\SQL2016N2-Fadetoblack.sql -Databases Fadetoblack
+notepad C:\temp\SQL2016N2-Fadetoblack.sql
+
+
+Export-DbaLogin -SqlInstance 192.168.11.49 -FilePath C:\temp\CC-SRV-25-logins.sql
+
+
+Remove-DbaLogin -SqlInstance 192.168.11.49 -Login mylogin
+
+Remove-DbaDbUser -SqlInstance 192.168.11.49 -User user1
+
+
+https://dbatools.io/download/
+
+# INSTALL
+	Method 1: Install dbatools from the PowerShell Gallery on newer systems
+
+	The PowerShell Gallery and the command Install-Module are natively available in Windows 10+ and Windows Server 2016+. If you run Windows 7, 8, Server 2012 skip to method 2.
+
+		Install-Module dbatools 
+
+	Install-Module requires Run As Administrator, and installs dbatools globally. Don’t have admin access or want to install dbatools only for yourself?
+
+		Install-Module dbatools -Scope CurrentUser 
+
+	Method 2: Install dbatools from the PowerShell Gallery on older systems
+
+	If you run Windows 7, 8, Server 2012 & below you can either install PackageManagement from powershellgallery.com.
+
+	First, install WMF5 from https://aka.ms/wmf5download then reboot the computer.
+
+		Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+		Install-Module dbatools 
+
+	Install-Module requires Run As Administrator, and installs dbatools globally. Don’t have admin access or want to install dbatools only for yourself?
+
+		Install-Module dbatools -Scope CurrentUser 
+
+	Method 3: For legacy (Win7, Win8, etc) systems: scripted installer directly from GitHub
+
+		Invoke-Expression (Invoke-WebRequest -UseBasicParsing https://dbatools.io/in) 
+		
+		
+	Method 4: Download the zip directly and manually import the module.
+
+	Once you’ve extracted the folder, make sure you rename it from dbatools-master or dbatools-development to plain o’ dbatools and place it somewhere in $env:PSMODULEPATH.
+	Method 5: Clone the repository from GitHub
+
+		git clone https://github.com/sqlcollaborative/dbatools 
+
+	 
+	Method 6: Offline install
+
+	Don’t have Internet access on your DBA workstation? Check out our offline install guide.
+	Method 7: chocolatey!
+
+	Now, you can even install dbatools using chocolatey
+
+		choco install dbatools 
+	
+	
