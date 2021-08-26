@@ -1,17 +1,19 @@
 
 exec sp_spaceused  
 
+-------------------------------------------------------------------------------
+-- Database sizes:
 SELECT      sys.databases.name,  
-            CONVERT(VARCHAR,SUM(size)*8/1024)+' MB' AS [Total disk space]  ,
-			SUM(size)*8/1024
+            CONVERT(VARCHAR,SUM(size)*8/1024)+' MB' AS [Total disk space],
+			SUM(size)*8/1024 as [size_Mb]
 FROM        sys.databases   
 JOIN        sys.master_files  
 ON          sys.databases.database_id=sys.master_files.database_id  
 GROUP BY    sys.databases.name  
 ORDER BY    3 --, sys.databases.name  
 
-
- 
+-------------------------------------------------------------------------------
+ -- Table sizes
 SELECT
   s.Name                                       AS SchemaName,
   t.Name                                       AS TableName,
@@ -36,7 +38,7 @@ ORDER BY
   3 DESC
 GO
 
-
+-------------------------------------------------------------------------------
 --Another way is using the stored procedure sp_spaceused which displays the number of rows, 
 -- disk space reserved, and disk space used by a table, indexed view, or Service Broker queue in the current database,
 -- or displays the disk space reserved and used by the whole database.
