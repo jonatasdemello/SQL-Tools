@@ -8,20 +8,23 @@ foreach ($filename in Get-ChildItem -Path $FolderPath -Filter "*.sql") { Invoke-
 EXEC dbo.ProvisionTableFunction 'dbo', 'udf_GetChildRegions'
 GO
 ALTER FUNCTION dbo.udf_GetChildRegions(@InstitutionId INTEGER)
-RETURNS @Institutions TABLE(RegionId INTEGER)
+	RETURNS @Institutions TABLE(RegionId INTEGER)
 AS
 
 -- Scalar-Valued Functions
 EXEC dbo.ProvisionScalarFunction 'dbo', 'udf_GetFilterCondition'
 GO
 BEGIN
+	-- 
 END
  
-ALTER FUNCTION dbo.udf_GetFilterCondition(@Filters FilterList READONLY)
-RETURNS NVARCHAR(MAX)
-AS
-BEGIN
-END
+--example
+	ALTER FUNCTION dbo.udf_GetFilterCondition(@Filters FilterList READONLY)
+	RETURNS NVARCHAR(MAX)
+	AS
+	BEGIN
+		--
+	END
 
 -- Views
 EXEC dbo.ProvisionView 'Solr', 'vwAssignments'
@@ -29,6 +32,7 @@ GO
 ALTER VIEW Solr.vwAssignments
 AS
 BEGIN
+	--
 END
 
 -- Stored Procedures
@@ -37,6 +41,7 @@ GO
 ALTER PROCEDURE [Career].[ClustersGet]
 AS
 BEGIN
+	--
 END
 
 -- Useful Scripts
@@ -55,6 +60,8 @@ INNER JOIN sys.schemas sch ON tab1.schema_id = sch.schema_id
 INNER JOIN sys.columns col1 ON col1.column_id = parent_column_id AND col1.object_id = tab1.object_id
 INNER JOIN sys.tables tab2 ON tab2.object_id = fkc.referenced_object_id
 INNER JOIN sys.columns col2 ON col2.column_id = referenced_column_id AND col2.object_id = tab2.object_id
+WHERE
+	tab1.name = 'Students';
 
 
 -- Adding a Column to a Table
@@ -65,6 +72,7 @@ BEGIN
     ALTER TABLE Education.SchoolSport ADD SportId INTEGER NOT NULL;
 END
 
+
 -- Removing a Column from a Table
 IF EXISTS(SELECT * FROM information_schema.columns
 	WHERE table_schema = 'Education' AND table_name = 'SchoolSport' AND column_name = 'SportId'
@@ -72,6 +80,7 @@ IF EXISTS(SELECT * FROM information_schema.columns
 BEGIN
     ALTER TABLE Education.SchoolSport DROP COLUMN SportId;
 END
+
 
 -- Renaming a Column
 IF EXISTS(SELECT * FROM information_schema.columns
@@ -105,6 +114,8 @@ UPDATE dbo.UserAccount SET PendingUserName = LEFT(PendingUserName, 50)
 -- Change data type.
 ALTER TABLE dbo.UserAccount ALTER COLUMN PendingUserName VARCHAR(50) NOT NULL
 
+
+
 -- Add New Index
 IF NOT EXISTS(SELECT i.name, o.name, s.name FROM sys.indexes i
     INNER JOIN sys.objects o ON (o.[object_id] = i.[object_id])
@@ -115,6 +126,7 @@ BEGIN
     CREATE INDEX IX_StudentProfile_UserAccountId ON Student.StudentProfile(UserAccountId);
 END
 
+
 -- Drop Existing Index
 IF EXISTS(SELECT i.name, o.name, s.name FROM sys.indexes i
     INNER JOIN sys.objects o ON (o.[object_id] = i.[object_id])
@@ -124,6 +136,7 @@ IF EXISTS(SELECT i.name, o.name, s.name FROM sys.indexes i
 BEGIN
     DROP INDEX Student.StudentProfile.IX_StudentProfile_UserAccountId
 END
+
 
 -- Change Existing Index
 
@@ -141,6 +154,7 @@ GO
 CREATE INDEX IX_StudentProfile_UserAccountId ON Student.StudentProfile(UserAccountId) INCLUDE(UserName);
 GO
 
+
 -- Add New Table
 IF NOT EXISTS(SELECT * FROM information_schema.tables
     WHERE table_schema = 'Student' AND table_name = 'StudentProfileExtension'
@@ -155,15 +169,10 @@ BEGIN
     )
 END
 
--- Drop Table 
+-- Note: using "REFERENCES" will generate a random name for the Foreign Key, Primary Key and Default Constraint
+-- making it harder to alter/drop later. I am in favor of using the following approach below.
 
--- Note: Here, you may need to drop any FK constraints before you'll be able to drop the table.
-IF EXISTS(SELECT * FROM information_schema.tables
-    WHERE table_schema = 'Student' AND table_name = 'StudentProfileExtension'
-)
-BEGIN
-    DROP TABLE Student.StudentProfileExtension
-END
+
 
 -- Add Foreign Key Constraint
 IF NOT EXISTS(SELECT * FROM information_schema.TABLE_CONSTRAINTS
@@ -175,7 +184,7 @@ BEGIN
 END
 GO
 
--- Remove Foreign Key Constraint
+-- Remove Foreign Key Constraint (by Name)
 IF EXISTS(SELECT * FROM information_schema.TABLE_CONSTRAINTS
     WHERE constraint_type = 'FOREIGN KEY' AND constraint_name = 'FK_ReportVisualization_ReportId'
 )
@@ -183,6 +192,27 @@ BEGIN
     ALTER TABLE School.ReportVisualization DROP CONSTRAINT FK_ReportVisualization_ReportId
 END
 GO
+
+
+-- Renaming a Table
+IF EXISTS(SELECT * FROM information_schema.tables
+    WHERE table_schema = 'Student' AND table_name = 'StudentProfile'
+)
+BEGIN
+    EXEC sp_rename 'Student.StudentProfile', 'StudentProfileNew'
+END
+
+
+-- Drop Table 
+
+-- Note: Here, you may need to drop any FK constraints before you'll be able to drop the table.
+IF EXISTS(SELECT * FROM information_schema.tables
+    WHERE table_schema = 'Student' AND table_name = 'StudentProfileExtension'
+)
+BEGIN
+    DROP TABLE Student.StudentProfileExtension
+END
+
 
 -- Add a Record
 IF NOT EXISTS (SELECT * FROM School.AccessType
@@ -207,12 +237,14 @@ GO
 
 DELETE FROM School.AccessType WHERE TranslationKey = 'CAREERCRUISING_ADMIN';
 
+
 -- Update a Record
 
 -- Another very easy one because there's no need for an existence check.
 UPDATE School.AccessType SET [Description] = 'CC Admin' WHERE TranslationKey = 'CAREERCRUISING_ADMIN';
 
--- Changing a Default Column Value
+
+-- Changing a Default Column Value (Constraint)
 
 -- This one's quite tricky because most default constraints do not have a defined name 
 -- (they use SQL's auto-generated constraint names, which will be randomly generated on each server). 
@@ -225,7 +257,10 @@ DECLARE @SQL NVARCHAR(MAX)
 SELECT @ConstraintName = OBJECT_NAME(dc.object_id)
 FROM sys.default_constraints dc
 INNER JOIN sys.columns c ON (c.column_id = dc.parent_column_id AND c.object_id = dc.parent_object_id)
-WHERE SCHEMA_NAME(dc.schema_id) = 'School' AND OBJECT_NAME(dc.parent_object_id) = 'SchoolInfo' AND c.name = 'CoursePlannerStatusId' AND dc.[definition] = '((1))'
+WHERE 
+	SCHEMA_NAME(dc.schema_id) = 'School' 
+	AND OBJECT_NAME(dc.parent_object_id) = 'SchoolInfo' 
+	AND c.name = 'CoursePlannerStatusId' --AND dc.[definition] = '((1))'
   
 IF @ConstraintName IS NOT NULL
 BEGIN
@@ -236,3 +271,39 @@ BEGIN
    EXEC sp_executeSQL @SQL;
 END
 GO 
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- Fast Merge data between 2 tables
+-- https://cc.davelozinski.com/sql/fastest-way-to-insert-new-records-where-one-doesnt-already-exist
+
+INSERT INTO #table1 (Id, guidd, TimeAdded, ExtraData)
+SELECT Id, guidd, TimeAdded, ExtraData
+FROM #table2
+WHERE NOT EXISTS (Select Id, guidd From #table1 WHERE #table1.id = #table2.id)
+
+-----------------------------------
+MERGE #table1 as [Target]
+USING  (select Id, guidd, TimeAdded, ExtraData from #table2) as [Source]
+(id, guidd, TimeAdded, ExtraData)
+    on [Target].id =[Source].id
+WHEN NOT MATCHED THEN
+    INSERT (id, guidd, TimeAdded, ExtraData)
+    VALUES ([Source].id, [Source].guidd, [Source].TimeAdded, [Source].ExtraData);
+
+------------------------------ best > 5,000,000 rows
+INSERT INTO #table1 (id, guidd, TimeAdded, ExtraData)
+SELECT id, guidd, TimeAdded, ExtraData from #table2
+EXCEPT
+SELECT id, guidd, TimeAdded, ExtraData from #table1
+
+------------------------------ best < 5,000,000 rows
+INSERT INTO #table1 (id, guidd, TimeAdded, ExtraData)
+SELECT #table2.id, #table2.guidd, #table2.TimeAdded, #table2.ExtraData
+FROM #table2
+LEFT JOIN #table1 on #table1.id = #table2.id
+WHERE #table1.id is null
+
+
+
