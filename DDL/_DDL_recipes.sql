@@ -306,4 +306,85 @@ LEFT JOIN #table1 on #table1.id = #table2.id
 WHERE #table1.id is null
 
 
+-------------------------------------------------------------------------------------------------------------------------------
+-- First, drop constraints
+PRINT N'Dropping Foreign Key [Study].[FK_ProgramInfo_StudyId]...';
+GO
+ALTER TABLE [Study].[ProgramInfo] DROP CONSTRAINT [FK_ProgramInfo_StudyId];
+GO
+
+PRINT N'Dropping Foreign Key [Study].[FK_SchoolId_ProgramInfo]...';
+GO
+ALTER TABLE [Study].[ProgramInfo] DROP CONSTRAINT [FK_SchoolId_ProgramInfo];
+GO
+
+-- Change columns - create a new one then rename
+PRINT N'Starting rebuilding table [Study].[ProgramInfo]...';
+GO
+BEGIN TRANSACTION;
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+SET XACT_ABORT ON;
+
+-- create a new temp table
+CREATE TABLE [Study].[tmp_ms_xx_ProgramInfo] (
+    [ProgramID]             INT            IDENTITY (1, 1) NOT NULL,
+    [StudyId]               INT            NOT NULL,
+    [SchoolId]              INT            NOT NULL,
+    [IsActive]              BIT            NOT NULL,
+    [ProgramName]           NVARCHAR (170) NULL,
+    [TranslationLanguageId] INT            NOT NULL,
+    PRIMARY KEY CLUSTERED ([ProgramID] ASC)
+);
+
+-- copy data from old to new table
+IF EXISTS (SELECT TOP 1 1 FROM   [Study].[ProgramInfo])
+    BEGIN
+        SET IDENTITY_INSERT [Study].[tmp_ms_xx_ProgramInfo] ON;
+        INSERT INTO [Study].[tmp_ms_xx_ProgramInfo] ([ProgramID], [StudyId], [SchoolId], [IsActive], [ProgramName], [TranslationLanguageId])
+        SELECT   [ProgramID],
+                 [StudyId],
+                 [SchoolId],
+                 [IsActive],
+                 [ProgramName],
+                 [TranslationLanguageId],
+        FROM     [Study].[ProgramInfo]
+        ORDER BY [ProgramID] ASC;
+        SET IDENTITY_INSERT [Study].[tmp_ms_xx_ProgramInfo] OFF;
+    END
+	
+-- remove old table
+DROP TABLE [Study].[ProgramInfo];
+
+-- rename new table to correct name
+EXECUTE sp_rename N'[Study].[tmp_ms_xx_ProgramInfo]', N'ProgramInfo';
+
+COMMIT TRANSACTION;
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+GO
+
+-- create index
+PRINT N'Creating Index [Study].[ProgramInfo].[ix_ProgramInfo_ProgramID]...';
+GO
+CREATE NONCLUSTERED INDEX [ix_ProgramInfo_ProgramID]
+    ON [Study].[ProgramInfo]([ProgramID] ASC);
+GO
+
+-- add foreign key
+PRINT N'Creating Foreign Key [Study].[FK_SchoolId_ProgramInfo]...';
+GO
+ALTER TABLE [Study].[ProgramInfo] WITH NOCHECK
+    ADD CONSTRAINT [FK_SchoolId_ProgramInfo] FOREIGN KEY ([SchoolId]) REFERENCES [School].[SchoolInfo] ([SchoolId]);
+GO
+
+
+-- enable constraint
+ALTER TABLE [Study].[ProgramInfo] WITH CHECK CHECK CONSTRAINT [FK_SchoolId_ProgramInfo];
+
+
+-- refresh stored procedures
+PRINT N'Refreshing Procedure [Career].[GetCareerCluster]...';
+GO
+EXECUTE sp_refreshsqlmodule N'[Career].[GetCareerCluster]';
+GO
+
 
