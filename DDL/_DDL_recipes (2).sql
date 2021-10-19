@@ -308,10 +308,10 @@ WHERE
   
 IF @ConstraintName IS NOT NULL
 BEGIN
-   SET @SQL = 'ALTER TABLE [School].[SchoolInfo] DROP CONSTRAINT ' + @ConstraintName;  
+   SET @SQL = 'ALTER TABLE School.SchoolInfo DROP CONSTRAINT ' + @ConstraintName;  
    EXEC sp_executeSQL @SQL;
      
-   SET @SQL = 'ALTER TABLE [School].[SchoolInfo] ADD CONSTRAINT DF_SchoolInfo_CoursePlannerStatusId DEFAULT 2 FOR CoursePlannerStatusId';  
+   SET @SQL = 'ALTER TABLE School.SchoolInfo ADD CONSTRAINT DF_SchoolInfo_CoursePlannerStatusId DEFAULT 2 FOR CoursePlannerStatusId';  
    EXEC sp_executeSQL @SQL;
 END
 GO 
