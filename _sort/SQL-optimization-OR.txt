@@ -1,0 +1,122 @@
+https://stackoverflow.com/questions/2161573/how-to-optimize-the-use-of-the-or-clause-when-used-with-parameters-sql-server
+
+
+CREATE PROCEDURE select_Proc1
+    @Key1 int=0,
+    @Key2 int=0
+AS
+BEGIN
+    SELECT key3
+    FROM Or_Table
+    WHERE (@key1 = 0 OR Key1 = @Key1) AND
+          (@key2 = 0 OR Key2 = @Key2)
+END
+GO
+
+SQL Server is not very good in optimizing the OR predicates.
+Use this:
+
+SELECT  key3
+FROM    or_table
+WHERE   @key1 = 0
+        AND @key2 = 0
+UNION ALL
+SELECT  key3
+FROM    or_table
+WHERE   @key1 = 0
+        AND @key2 <> 0
+        AND key2 = @key2
+UNION ALL
+SELECT  key3
+FROM    or_table
+WHERE   @key2 = 0
+        AND @key1 <> 0
+        AND key1 = @key1
+UNION ALL
+SELECT  key3
+FROM    or_table
+WHERE   @key1 <> 0
+        AND @key2 <> 0
+        AND key1 = @key1
+        AND key2 = @key2
+
+
+
+MSSQL 2008 has optimization syntax of condition simplification, here it is
+
+ Where (@key1 =0 OR Key1 =@Key1) AND
+      (@key2 =0 OR Key2 =@Key2) option(recompile)
+
+This will optimize usage of constants
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+articles >> performance tuning >> How to Optimize the Use of the ...
+How to Optimize the Use of the "OR" Clause When Used with Parameters
+By : Preethiviraj Kulasingham
+Jul 20, 2005 	
+
+Have you ever tried to use parameter validation within a SQL Server stored procedure using an OR clause? At times, it can cause performance problems. I found this recently when I was asked to fine tune a stored procedure. The procedure had two parameters, and either of them could be optional. The developer who wrote the stored procedure combined both conditions into one WHERE clause using “AND” and “OR”.
+
+I created a script similar to the data we had in our database. Readers can try this in any of their test databases:
+
+Create Table Or_Table
+(
+IDKey int Identity(1,1) Primary key,
+Key1 Int NOT NULL,
+Key2 Int NOT NULL,
+Key3 varchar(15)
+)
+GO
+
+-- Insert Test Data
+Declare @Key1 int, @Key2 Int
+Set @Key1 =1
+While @Key1<100
+BEGIN
+Set @Key2 =1
+While @Key2<=20
+BEGIN
+Insert Or_Table ( Key1, key2, Key3)
+Values(@Key1, @key2, 'Data '+Convert(varchar, @Key1) +', '+Convert(varchar, @Key2) )
+Set @Key2 =@Key2+1
+END
+Set @key1= @Key1+1
+END
+
+-- Create Indexes on key fields
+Create Index INN_Or_Table_Key1 On Or_Table(Key1)
+Create Index INN_Or_Table_Key2 On Or_Table(Key2)
+Go
+
+I created the test data in such a way to keep the distribution of key1 and key2 differently (so that I may get different execution plans.) The developer created a stored procedure to retrieve the data based on key1 or key2. Any one of the parameters can be null at any given time. It gave him three possible scenarios: both parameters, only key1 and only key2. The stored procedure he wrote was like this:
+
+Create Procedure select_Proc1
+@Key1 int=0,
+@Key2 int=0
+As
+BEGIN
+Select key3
+From Or_Table
+Where (@key1 =0 OR Key1 =@Key1) AND
+(@key2 =0 OR Key2 =@Key2)
+END
+GO
+
+The stored procedure worked well in the development environment. However, when the application went to production, this particular stored procedure took more resources than expected. When I checked with the execution plan, it was always the same irrespective of the parameter combination.
+
+As I knew only three different scenarios were possible, I tested the stored procedure with each of three different parameters:
+
+Exec select_Proc1 @Key1 =27, @Key2 =15 -- Both parameters are provided
+Exec select_Proc1 @Key1 =61 -- Only @Key1 is provided
+Exec select_Proc1 @Key2 =5 -- Only @key2 is provided
+
+The resulting execution plan is shown below (your mileage may vary, based on your computer configuration and usage).
+
+The query engine used a Clustered Index scan. It alone costs 0.0803 milliseconds. Finally, when the SELECT operation occurs, it goes to 0.0940 milliseconds. Even though the figure is quite acceptable, the timing of the clustered index scan is food for thought. When both parameters are passed, covered by non-clustered indexes, why should a clustered index scan (which is slightly better than a table scan, still one of the identified bottlenecks) be used?
+
+Another cause for concern is the fact that the execution plan never changes. Whether the parameter combinations are changed, or more data is dumped into the table, the result is the same. This hints that SQL Server may be unable to identify the optimal index.
+
+Even though columns in the WHERE clauses are covered by indexes, SQL Server is unable to use these indexes. This raises the question as to whether anything is “blocking” the use of the indexes. The answer to this question is yes -- the culprits are the parameters and the “OR” condition. The parameters are not covered by indexes, which means SQL Server cannot use any of the indexes to evaluate “@key1=0” (a condition which also applies to @key2=0). Effectively, this means SQL Server cannot use indexes to evaluate the clause “@key1=0 OR Key1= @key1” (as the “OR” clause is the union of rows covered by both conditions). The same principle applies to the other clause (re. key2) as well. This leads SQL Server to conclude that no indexes can be used to extract the rows, leaving SQL Server to utilize the next best approach -- a clustered index scan.
+
+

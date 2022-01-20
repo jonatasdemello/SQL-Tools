@@ -1,4 +1,3 @@
-
 -- SQL Server: How to Join to first row
 -- https://stackoverflow.com/questions/2043259/sql-server-how-to-join-to-first-row
 
