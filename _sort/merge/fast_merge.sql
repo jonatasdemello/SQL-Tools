@@ -23,8 +23,8 @@ SELECT id, guidd, TimeAdded, ExtraData from #table1
 ------------------------------ best < 5,000,000 rows
 INSERT INTO #table1 (id, guidd, TimeAdded, ExtraData)
 SELECT #table2.id, #table2.guidd, #table2.TimeAdded, #table2.ExtraData
-FROM #table2
-LEFT JOIN #table1 on #table1.id = #table2.id
-WHERE #table1.id is null
+	FROM #table2
+	LEFT JOIN #table1 on #table1.id = #table2.id
+	WHERE #table1.id is null
 
 

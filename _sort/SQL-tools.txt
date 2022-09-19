@@ -1,20 +1,47 @@
 
 SQL Tools
-https://github.com/microsoft/mssql-scripter/blob/dev/doc/usage_guide.md
-https://github.com/microsoft/mssql-scripter/blob/dev/doc/installation_guide.md
+	https://github.com/microsoft/mssql-scripter/blob/dev/doc/usage_guide.md
+	https://github.com/microsoft/mssql-scripter/blob/dev/doc/installation_guide.md
 
 
 pip install wheel
-pip install mssql-scripter 
+pip install mssql-scripter
 
 mssql-scripter -h
 
-pip install --upgrade setuptools 
+pip install --upgrade setuptools
 pip --upgrade pip
 
 
+SQLFluff
+	https://docs.sqlfluff.com/en/stable/
+	https://github.com/sqlfluff/sqlfluff
+
+	https://towardsdatascience.com/sqlfluff-the-linter-for-modern-sql-8f89bd2e9117
+	https://docs.sqlfluff.com/en/stable/gettingstarted.html
+	https://docs.sqlfluff.com/en/stable/rules.html
+	https://docs.sqlfluff.com/en/stable/configuration.html
 
 
+VS Code
+	https://github.com/sqlfluff/vscode-sqlfluff
+	https://marketplace.visualstudio.com/items?itemName=dorzey.vscode-sqlfluff
+
+Python
+	https://github.com/psf/black
+	https://flake8.pycqa.org/en/latest/
+
+
+https://github.com/tsqllint/tsqllint
+https://github.com/joereynolds/sql-lint
+
+
+Style Guide
+	https://www.sqlstyle.guide/
+	https://about.gitlab.com/handbook/business-technology/data-team/platform/sql-style-guide/
+	https://docs.telemetry.mozilla.org/concepts/sql_style.html
+
+-------------------------------------------------------------------------------------------------------------------------------
 Dump database object schema
 
 # generate DDL scripts for all objects in the Adventureworks database and save the script to a file
@@ -66,12 +93,12 @@ Note this example is for Linux and macOS usage.
 # change a schema name in the generated DDL script
 # 1) generate DDL scripts for all objects in the Adventureworks database
 # 2) pipe generated script to sed and change all occurrences of SalesLT to SalesLT_test and save the script to a file
-$ mssql-scripter -S localhost -d Adventureworks -U sa | sed -e "s/SalesLT./SalesLT_test./g" > adventureworks_SalesLT_test.sql 
+$ mssql-scripter -S localhost -d Adventureworks -U sa | sed -e "s/SalesLT./SalesLT_test./g" > adventureworks_SalesLT_test.sql
 
 Script data to a file
 
 # script all the data to a file.
-mssql-scripter -S localhost -d AdventureWorks -U sa --data-only > ./adventureworks-data.sql 
+mssql-scripter -S localhost -d AdventureWorks -U sa --data-only > ./adventureworks-data.sql
 
 Environment Variables
 
