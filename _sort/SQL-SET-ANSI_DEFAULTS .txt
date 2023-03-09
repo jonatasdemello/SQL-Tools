@@ -1,0 +1,82 @@
+
+
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-statements-transact-sql?view=sql-server-ver16#considerations-when-you-use-the-set-statements
+
+https://docs.microsoft.com/en-us/sql/t-sql/statements/set-ansi-defaults-transact-sql?view=sql-server-ver16
+
+https://social.msdn.microsoft.com/Forums/sqlserver/en-US/b4ce5caa-3ba0-4194-9004-364b47e335fa/ansipadding-issue?forum=transactsql
+
+-------------------------------------------------------------------------------------------------------------------------------
+SET ANSI_DEFAULTS ON
+
+ANSI_DEFAULTS is a server-side setting which can enable the behavior for all client connections. 
+The client typically requests the setting on connection or session initialization. 
+Users should not modify the server setting.
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+SET ANSI_NULLS ON
+
+When ANSI_NULLS is ON, 
+a SELECT statement that uses WHERE column_name = NULL returns zero rows even if there are null values in column_name. 
+A SELECT statement that uses WHERE column_name <> NULL returns zero rows even if there are nonnull values in column_name.
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+SET ANSI_PADDING { ON | OFF }
+
+ANSI_PADDING should always be set to ON.
+
+The default for SET ANSI_PADDING is ON. 
+
+ANSI_PADDING must be ON when you are creating or changing indexes on computed columns or indexed views. For more information about required SET option settings with indexed views and indexes on computed columns, see "Considerations When You Use the SET Statements" in SET Statements (Transact-SQL).
+
+The SET ANSI_PADDING setting does not affect the nchar, nvarchar, ntext, text, image, varbinary(max), varchar(max), and nvarchar(max) data types. They always display the SET ANSI_PADDING ON behavior. This means trailing spaces and zeros are not trimmed.
+
+
+Controls the way the column stores values shorter than the defined size of the column, and the way the column stores values that have trailing blanks in char, varchar, binary, and varbinary data.
+
+Columns defined with char, varchar, binary, and varbinary data types have a defined size.
+
+This setting affects only the definition of new columns. After the column is created, SQL Server stores the values based on the setting when the column was created. Existing columns are not affected by a later change to this setting.
+
+ANSI_PADDING ON
+
+	char(n) NOT NULL or binary(n) NOT NULL
+		Pad original value (with trailing blanks for char columns and with trailing zeros for binary columns) to the length of the column.
+
+	char(n) NULL or binary(n) NULL
+		Follows same rules as for char(n) or binary(n) NOT NULL when SET ANSI_PADDING is ON.
+
+	varchar(n) or varbinary(n)
+		Trailing blanks in character values inserted into varchar columns are not trimmed. 
+		Trailing zeros in binary values inserted into varbinary columns are not trimmed. 
+		Values are not padded to the length of the column.
+
+ANSI_PADDING OFF
+
+	char(n) NOT NULL or binary(n) NOT NULL
+		Pad original value (with trailing blanks for char columns and with trailing zeros for binary columns) to the length of the column.
+
+	char(n) NULL or binary(n) NULL
+		Follows same rules as for varchar or varbinary when SET ANSI_PADDING is OFF.
+		
+	varchar(n) or varbinary(n)
+		Trailing blanks in character values inserted into a varchar column are trimmed. 
+		Trailing zeros in binary values inserted into a varbinary column are trimmed.
+
+When padded, char columns are padded with blanks, and binary columns are padded with zeros. 
+When trimmed, char columns have the trailing blanks trimmed, and binary columns have the trailing zeros trimmed.
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+SET ANSI_WARNINGS { ON | OFF }
+
+Specifies ISO standard behavior for several error conditions.
+
+SET ANSI_WARNINGS affects the following conditions:
+
+    When set to ON, if null values appear in aggregate functions, such as SUM, AVG, MAX, MIN, STDEV, STDEVP, VAR, VARP, or COUNT, a warning message is generated. When set to OFF, no warning is issued.
+
+    When set to ON, the divide-by-zero and arithmetic overflow errors cause the statement to be rolled back and an error message is generated. When set to OFF, the divide-by-zero and arithmetic overflow errors cause null values to be returned. The behavior in which a divide-by-zero or arithmetic overflow error causes null values to be returned occurs if an INSERT or UPDATE is tried on a character, Unicode, or binary column in which the length of a new value exceeds the maximum size of the column. If SET ANSI_WARNINGS is ON, the INSERT or UPDATE is canceled as specified by the ISO standard. Trailing blanks are ignored for character columns and trailing nulls are ignored for binary columns. When OFF, data is truncated to the size of the column and the statement succeeds.
+
