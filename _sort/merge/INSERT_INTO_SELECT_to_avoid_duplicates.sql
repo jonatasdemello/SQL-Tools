@@ -1,16 +1,10 @@
 /*
-Table1
--------------
-ID Name
-1  A
+Table1       Table2
+-------      -------
+ID Name      ID Name
+1  A         1  Z
 2  B
 3  C
-
-Table2
---------
-ID Name
-1  Z
-
 */
 
 -- NOT EXISTS
@@ -40,5 +34,6 @@ INSERT INTO TABLE_2 (id, name)
 
 --Of the three options, the LEFT JOIN/IS NULL is less efficient.  
 
---See <a href="http://explainextended.com/2009/09/15/not-in-vs-not-exists-vs-left-join-is-null-sql-server/"> this link for more details
+-- See <a href="http://explainextended.com/2009/09/15/not-in-vs-not-exists-vs-left-join-is-null-sql-server/"> 
+-- this link for more details
 
