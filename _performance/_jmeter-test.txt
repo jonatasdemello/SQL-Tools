@@ -16,7 +16,7 @@ jdbc:sqlserver://localhost;user=MyUserName;password=*****;
 jdbc:sqlserver://database.windows.net;DatabaseName=User
 jdbc:sqlserver://192.168.11.49;DatabaseName=cc3_dev
 
-"XelloDbServer": "Server=192.168.11.49;Database=cc3_dev;User ID=ccwebadmin;Password=crm5au1g"
+"XelloDbServer": "Server=192.168.11.49;Database=cc3_dev;User ID=ccwebadmin;Password=Password"
 
 
 
