@@ -91,19 +91,38 @@ begin
 end
 
 
-select top 25
-	Table_Name = (select left(name,25) from sysobjects where id = objid),
+-- select top 25
+	-- Table_Name = (select left(name,25) from sysobjects where id = objid),
+	-- rows = convert(char(11), rows),
+	-- reserved_KB = ltrim(str(reserved * d.low / 1024.,15,0) + ' ' + 'KB'),
+	-- data_KB = ltrim(str(data * d.low / 1024.,15,0) + ' ' + 'KB'),
+	-- index_size_KB = ltrim(str(indexp * d.low / 1024.,15,0) + ' ' + 'KB'),
+	-- unused_KB = ltrim(str(unused * d.low / 1024.,15,0) + ' ' + 'KB')
+-- from 	#spt_space, master.dbo.spt_values d
+-- where 	d.number = 1
+-- and 	d.type = 'E'
+-- order by reserved desc
+
+
+select --top 100
+	SchemaName = SCHEMA_NAME(s.schema_id),
+	Table_Name = (select left(name,100) from sysobjects where id = objid),
 	rows = convert(char(11), rows),
-	reserved_KB = ltrim(str(reserved * d.low / 1024.,15,0) + ' ' + 'KB'),
-	data_KB = ltrim(str(data * d.low / 1024.,15,0) + ' ' + 'KB'),
-	index_size_KB = ltrim(str(indexp * d.low / 1024.,15,0) + ' ' + 'KB'),
-	unused_KB = ltrim(str(unused * d.low / 1024.,15,0) + ' ' + 'KB')
+	reserved_KB = ltrim(str(reserved * d.low / 1024.,15,0) ),-- + ' ' + 'KB'),
+	data_KB = ltrim(str(data * d.low / 1024.,15,0) ),-- + ' ' + 'KB'),
+	index_size_KB = ltrim(str(indexp * d.low / 1024.,15,0) ),-- + ' ' + 'KB'),
+	unused_KB = ltrim(str(unused * d.low / 1024.,15,0) ) -- + ' ' + 'KB')
 		
-from 	#spt_space, master.dbo.spt_values d
+from 	#spt_space t, master.dbo.spt_values d, sys.objects S 
 where 	d.number = 1
 and 	d.type = 'E'
+AND		S.object_id = t.objid
 order by reserved desc
+
 
 drop table #spt_space
 close c_tables
 deallocate c_tables
+
+go
+

@@ -1,0 +1,41 @@
+---------------------------
+Services
+---------------------------
+Windows could not start the SQL Server (SQLEXPRESS) on Local Computer. For more information, review the System Event Log. 
+If this is a non-Microsoft service, contact the service vendor, and refer to service-specific error code 10013.
+
+SQL Server could not spawn FRunCommunicationsManager thread. Check the SQL Server error log and the operating system error log for information about possible related problems.
+
+Could not start the network library because of an internal error in the network library. To determine the cause, review the errors immediately preceding this one in the error log.
+
+TDSSNIClient initialization failed with error 0x271d, status code 0x1. Reason: Initialization failed with an infrastructure error. Check for previous errors. An attempt was made to access a socket in a way forbidden by its access permissions. 
+
+TDSSNIClient initialization failed with error 0x271d, status code 0xa. Reason: Unable to initialize the TCP/IP listener. An attempt was made to access a socket in a way forbidden by its access permissions. 
+
+Server TCP provider failed to listen on [ 'any' <ipv6> 1433]. Tcp port is already in use.
+
+---------------------------
+OK   
+---------------------------
+
+Go to Start > Microsoft SQL Server < SQL_server_version> > SQL Server Configuration Manager. 
+Go to SQL Server Network Configuration > Protocols for <SQL_server_version>.
+Go to TCP/IP > IP addresses, scroll down to the IPAll settings group and change necessary TCP port to any other free port in the range 49152–65535:
+
+
+netsh int ip reset resetlog.txt
+
+cls & netstat -oanb -p tcp 
+
+netsh int ipv4 show dynamicportrange tcp
+netsh int ipv4 add excludedportrange tcp startport=1433 numberofports=1 store=persistent
+
+netsh int ipv6 show dynamicportrange tcp
+netsh int ipv6 add excludedportrange tcp startport=1433 numberofports=1 store=persistent
+
+
+Only assign one IP to use port 1433 and configure others for dynamic value, 
+by setting TCP Dynamic Ports to 0 and blank off the TCP Port value. 
+
+I chose 127.0.0.1 (loopback IP @ local) to bind with. 
+Restart your SQL Server service.

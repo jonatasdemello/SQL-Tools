@@ -1,0 +1,17 @@
+
+Storage
+After reading about how in-row vs. out-of-row storage works, and keeping in mind that actual storage is limited to actual data, it actually seems to me that the choice of n has little or no bearing on storage (besides making sure it's big enough to hold everything). Even using varchar(max) shouldn't have any impact on storage. Instead, a goal might be to limit the actual size of each data row to ~8000 bytes if possible. Is that an accurate read on things?
+
+
+Use only what you need. Considerations can be made if there is a high probability that column length will need to increase in the near future, but keep in mind that it is easier to expand the size of a column than reduce the size.
+
+
+Use only what you need. Considerations can be made if there is a high probability that column length will need to increase in the near future, but keep in mind that it is easier to expand the size of a column than reduce the size.
+
+Use only what you need. Considerations can be made if there is a high probability that column length will need to increase in the near future, but keep in mind that it is easier to expand the size of a column than reduce the size.
+
+Your goal should be to use the least amount of physical space to store what the app / business needs to store without breaking or truncating such that the incomplete value loses meaning or causes problems downstream. If you need to store a 12,000 character thingy, then use VARCHAR(MAX) because that is what is needed. If you are storing a phone number or postal / zip code, then it would be unwise to use VARCHAR(100), and irresponsible to use VARCHAR(MAX).
+
+
+
+The page size is 8k, because that is the maximum size of a record in SQL Server (8096 I believe). However, when data is read, it is read in 64k chunks called extents (8 - 8k pages at a time).

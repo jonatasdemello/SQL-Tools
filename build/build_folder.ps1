@@ -3,7 +3,7 @@ Param(
 	$SQLServer = ".\SQLEXPRESS",
 	$SQLDBName = "CC3_local",
 	$uid = "ccwebadmin",
-	$pwd = "crm5au1g",
+	$pwd = "Password",
 	[switch]$showOutput
 )
 # $FolderPath = Get-Location

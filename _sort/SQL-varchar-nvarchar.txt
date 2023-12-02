@@ -1,0 +1,28 @@
+SQL
+https://learn.microsoft.com/en-us/sql/t-sql/data-types/nchar-and-nvarchar-transact-sql?view=sql-server-ver16
+
+
+nvarchar [ ( n | max ) ]
+
+Variable-size string data. n defines the string size in byte-pairs, and can be a value from 1 through 4,000. max indicates that the maximum storage size is 2^31-1 characters (2 GB). The storage size is two times n bytes + 2 bytes. For UCS-2 encoding, the storage size is two times n bytes + 2 bytes and the number of characters that can be stored is also n. For UTF-16 encoding, the storage size is still two times n bytes + 2 bytes, but the number of characters that can be stored may be smaller than n because Supplementary Characters use two byte-pairs (also called surrogate-pair). The ISO synonyms for nvarchar are national char varying and national character varying.
+
+
+https://www.java67.com/2021/08/difference-between-varchar-and-nvarchar.html
+
+Differences  between VARCHAR and NVARCHAR in SQL Server
+Here are a few important differences between VARCHAR and NVARCHAR data types in SQL Server. You can keep these differences in mind while choosing the right data type for your columns in a table or database. 
+
+1. VARCHAR is a non-Unicode character data type with a maximum length of 8,000 characters, while NVARCHAR is a Unicode character data type with a maximum length of 4,000 characters.
+
+2. VARCHAR literals are enclosed in single quotes, like 'John,' but NVARCHAR literals are prefixed with N also, for example,  N'John.'
+
+3. In the case of VARCHAR data type, each character occupies 1 byte, while in the case of NVARCHAR, each character needs 2 bytes of storage, which means NVARCHAR is twice as expensive as VARCHAR.
+
+4. Use of index can fail if you provide wrong data type, like in SQL Server, when you have an index over a VARCHAR column and present it a Unicode String, MSSQL Server will not use the index. If you want to learn more, you can always see these Microsoft SQL Server online courses to learn these fundamental SQL Server database concepts in depth. 
+
+
+
+https://www.sqlshack.com/sql-varchar-data-type-deep-dive/
+
+
+
