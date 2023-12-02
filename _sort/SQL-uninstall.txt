@@ -1,0 +1,71 @@
+http://www.sqlcoffee.com/Tips0026.htm
+
+1. Uninstall all SQL Server components you can using Control Panel -> Programs and Features
+
+2. Backup the registry.
+
+3. Delete the following keys in regedit:
+
+--HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server
+
+--HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSSQLServer
+
+4. Go to HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall and delete all the sub-keys referencing SQL Server.
+
+5. Go to HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services and delete all the keys referencing SQL Server.
+
+6. Rename all the SQL Server folders in the computer like C:\Program Files\Microsoft SQL Server and subfolders.
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+Before you uninstall your SQL Server, we recommend that you stop all SQL Server services before you uninstall SQL Server components. Active connections can prevent successful uninstallation. And then please follow below steps to uninstall SQL Server manually:
+
+    Uninstall the existing SQL Server and all the components from the add remove program.
+
+    Backup the registry.
+
+    Delete the following keys using regedit:
+    --HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server
+    --HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSSQLServer
+
+    Go to HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall and delete all the sub-keys referencing SQL Server.
+
+    Go to HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services and delete all the keys referencing SQL Server.
+
+    Rename all the SQL Server folders in the computer.
+
+    Reboot the machine.
+
+I have a similar issue before and solved by this solution, hope it will help you also.
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+C:\Program Files\Microsoft SQL Server
+C:\Program Files (x86)\Microsoft SQL Server
+C:\Program Files\Microsoft Visual Studio
+C:\Program Files (x86)\Microsoft Visual Studio
+C:\Program Files (x86)\Microsoft Visual Studio 14.0
+
+$folders = @(
+'C:\Program Files\Microsoft SQL Server',
+'C:\Program Files (x86)\Microsoft SQL Server',
+'C:\Program Files\Microsoft Visual Studio',
+'C:\Program Files (x86)\Microsoft Visual Studio',
+'C:\Program Files (x86)\Microsoft Visual Studio 14.0')
+
+foreach ( $node in $folders )
+{
+    "Item: [$node]"
+	Remove-Item $node -Recurse -Force 
+}
+
+
+
+Remove-Item -Recurse -Force "C:\Program Files\Microsoft SQL Server"
+Remove-Item -Recurse -Force "C:\Program Files (x86)\Microsoft SQL Server"
+Remove-Item -Recurse -Force "C:\Program Files\Microsoft Visual Studio"
+Remove-Item -Recurse -Force "C:\Program Files (x86)\Microsoft Visual Studio"
+Remove-Item -Recurse -Force "C:\Program Files (x86)\Microsoft Visual Studio 14.0"
+
+
+
