@@ -1,0 +1,142 @@
+
+SQL Tools
+	https://github.com/microsoft/mssql-scripter/blob/dev/doc/usage_guide.md
+	https://github.com/microsoft/mssql-scripter/blob/dev/doc/installation_guide.md
+
+
+pip install wheel
+pip install mssql-scripter
+
+mssql-scripter -h
+
+pip install --upgrade setuptools
+pip --upgrade pip
+
+
+SQLFluff
+	https://docs.sqlfluff.com/en/stable/
+	https://github.com/sqlfluff/sqlfluff
+
+	https://towardsdatascience.com/sqlfluff-the-linter-for-modern-sql-8f89bd2e9117
+	https://docs.sqlfluff.com/en/stable/gettingstarted.html
+	https://docs.sqlfluff.com/en/stable/rules.html
+	https://docs.sqlfluff.com/en/stable/configuration.html
+
+
+VS Code
+	https://github.com/sqlfluff/vscode-sqlfluff
+	https://marketplace.visualstudio.com/items?itemName=dorzey.vscode-sqlfluff
+
+Python
+	https://github.com/psf/black
+	https://flake8.pycqa.org/en/latest/
+
+
+https://github.com/tsqllint/tsqllint
+https://github.com/joereynolds/sql-lint
+
+
+Style Guide
+	https://www.sqlstyle.guide/
+	https://about.gitlab.com/handbook/business-technology/data-team/platform/sql-style-guide/
+	https://docs.telemetry.mozilla.org/concepts/sql_style.html
+
+-------------------------------------------------------------------------------------------------------------------------------
+Dump database object schema
+
+# generate DDL scripts for all objects in the Adventureworks database and save the script to a file
+mssql-scripter -S localhost -d AdventureWorks -U sa
+
+# alternatively, specify the schema only flag to generate DDL scripts for all objects in the Adventureworks database and save the script to a file
+mssql-scripter -S localhost -d AdventureWorks -U sa -f ./adventureworks.sql
+
+Dump database object data
+
+# generate DDL scripts for all objects in the Adventureworks database and save the script to stdout.
+mssql-scripter -S localhost -d AdventureWorks -U sa --data-only
+
+Dump the database object schema and data
+
+# script the database schema and data piped to a file.
+mssql-scripter -S localhost -d AdventureWorks -U sa --schema-and-data  > ./adventureworks.sql
+
+# execute the generated above script with sqlcmd
+sqlcmd -S mytestserver -U sa -i ./adventureworks.sql
+
+Include database objects
+
+# generate DDL scripts for objects that contain 'Employee' in their name to stdout
+mssql-scripter -S localhost -d AdventureWorks -U sa --include-objects Employee
+
+# generate DDL scripts for the dbo schema and pipe the output to a file
+mssql-scripter -S localhost -d AdventureWorks -U sa --include-objects dbo. > ./dboschema.sql
+
+Exclude database objects
+
+# generate DDL scripts for objects that do not contain 'Sale' in their name to stdout
+mssql-scripter -S localhost -d AdventureWorks -U sa --exclude-objects Sale
+
+Target server version
+
+# specify the version of SQL Server the script will be run against
+mssql-scripter -S myServer -d AdventureWorks -U myUser –-target-server-version "AzureDB" > myData.sql
+
+Target server edition
+
+# specify the edition of SQL Server the script will be run against
+mssql-scripter -S localhost -d AdventureWorks -U myUser –-target-server-edition "Enterprise" > myData.sql
+
+Pipe a generated script to sed
+
+Note this example is for Linux and macOS usage.
+
+# change a schema name in the generated DDL script
+# 1) generate DDL scripts for all objects in the Adventureworks database
+# 2) pipe generated script to sed and change all occurrences of SalesLT to SalesLT_test and save the script to a file
+$ mssql-scripter -S localhost -d Adventureworks -U sa | sed -e "s/SalesLT./SalesLT_test./g" > adventureworks_SalesLT_test.sql
+
+Script data to a file
+
+# script all the data to a file.
+mssql-scripter -S localhost -d AdventureWorks -U sa --data-only > ./adventureworks-data.sql
+
+Environment Variables
+
+You can set environment variables for your connection string through the following steps:
+
+# set environment variable MSSQL_SCRIPTER_CONNECTION_STRING with a connection string.
+$ export MSSQL_SCRIPTER_CONNECTION_STRING='Server=myserver;Database=mydb;User Id=myuser;Password=mypassword;'
+$ mssql-scripter
+
+# set environment variable MSSQL_SCRIPTER_PASSWORD so no password input is required.
+$ export MSSQL_SCRIPTER_PASSWORD='[PLACEHOLDER]'
+$ mssql-scripter -S localhost -d AdventureWorks -U sa
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO #table1 (Id, guidd, TimeAdded, ExtraData)
+SELECT Id, guidd, TimeAdded, ExtraData
+FROM #table2
+WHERE NOT EXISTS (Select Id, guidd From #table1 WHERE #table1.id = #table2.id)
+-----------------------------------
+MERGE #table1 as [Target]
+USING  (select Id, guidd, TimeAdded, ExtraData from #table2) as [Source]
+(id, guidd, TimeAdded, ExtraData)
+    on [Target].id =[Source].id
+WHEN NOT MATCHED THEN
+    INSERT (id, guidd, TimeAdded, ExtraData)
+    VALUES ([Source].id, [Source].guidd, [Source].TimeAdded, [Source].ExtraData);
+------------------------------
+INSERT INTO #table1 (id, guidd, TimeAdded, ExtraData)
+SELECT id, guidd, TimeAdded, ExtraData from #table2
+EXCEPT
+SELECT id, guidd, TimeAdded, ExtraData from #table1
+------------------------------
+INSERT INTO #table1 (id, guidd, TimeAdded, ExtraData)
+SELECT #table2.id, #table2.guidd, #table2.TimeAdded, #table2.ExtraData
+FROM #table2
+LEFT JOIN #table1 on #table1.id = #table2.id
+WHERE #table1.id is null
+
+
