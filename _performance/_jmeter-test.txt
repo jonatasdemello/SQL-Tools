@@ -14,9 +14,9 @@ jdbc:sqlserver://[serverName[\instanceName][:portNumber]][;property=value[;prope
 jdbc:sqlserver://localhost;user=MyUserName;password=*****;
 
 jdbc:sqlserver://database.windows.net;DatabaseName=User
-jdbc:sqlserver://192.168.11.49;DatabaseName=cc3_dev
+jdbc:sqlserver://127.0.0.1;DatabaseName=cc3_dev
 
-"XelloDbServer": "Server=192.168.11.49;Database=cc3_dev;User ID=User;Password=Password"
+"XelloDbServer": "Server=127.0.0.1;Database=cc3_dev;User ID=User;Password=Password"
 
 
 
