@@ -124,7 +124,7 @@ The Server, Database, Username, Password are parameters passed to the script:
 
 For example:
 
-```call CreateDatabase.bat localhost\sqlexpress CC3_local username password```
+```call CreateDatabase.bat localhost\sqlexpress Local_DB username password```
 
 
 Inside each folder there is a ".bat" script to load and execute all ".sql" files inside that folder.
@@ -161,7 +161,7 @@ The Server, Database, Username, Password are parameters passed to the script:
 
 For example:
 
-```call Upgrade.bat localhost\sqlexpress CC3_local username password```
+```call Upgrade.bat localhost\sqlexpress Local_DB username password```
 
 
 Inside each folder there is a ".bat" script to load and execute all ".sql" files inside that folder.

@@ -38,13 +38,13 @@ When you restore a database from a source SQL Server the database users (Native 
 
 The SQL Server Logins that are based on Windows Domain Accounts will always have the same SID, because SQL Server will retrieve these values from Active Directory.
 
-When you restore the database from the source to the target SQL Server the SIDs of the Native SQL Server Logins will be mismatched, 
+When you restore the database from the source to the target SQL Server the SIDs of the Native SQL Server Logins will be mismatched,
 even though a user might be listed in the sys.server_principals system management catalog of the SQL Server instance and in the sys.database_principals system management catalog of the restored database.
 
 
 Solution
 
-To rectify this and allow you to navigate the "SQL Server Login | permissions" and/or the "Database Properties | Permissions" 
+To rectify this and allow you to navigate the "SQL Server Login | permissions" and/or the "Database Properties | Permissions"
 you can relink these orphaned database users to the SQL Server Login.
 
 Switch to your user database and query the orphaned database users:
@@ -66,13 +66,13 @@ Seeing as sp_change_users_login is deprecated, you could achieve the same with t
 
 USE [<your_db>]
 GO
-ALTER USER <database_user> 
+ALTER USER <database_user>
     WITH LOGIN = <sql_server_login>
 
 In some cases
 
-...when you receive a database backup from a client, you might not have a corresponding SQL Server Login to link to the Database User. 
-In that case you can create a SQL Server Login without assigning permissions to the restored database and then link the newly 
+...when you receive a database backup from a client, you might not have a corresponding SQL Server Login to link to the Database User.
+In that case you can create a SQL Server Login without assigning permissions to the restored database and then link the newly
 create SQL Server Login with the Database User with the above mentioned statements.
 
 */
@@ -88,11 +88,11 @@ sp_change_users_login 'Report'
 --exec sp_change_users_login 'Auto_Fix'
 
 sp_change_users_login 'Update_One', 'qa', 'qa'
-sp_change_users_login 'Update_One', 'ccwebadmin', 'ccwebadmin'
+sp_change_users_login 'Update_One', 'User', 'User'
 
 sp_change_users_login 'Update_One', 'reports', 'reports'
 
-sp_change_users_login [ @Action = ] 'action'   
-    [ , [ @UserNamePattern = ] 'user' ]   
-    [ , [ @LoginName = ] 'login' ]   
-    [ , [ @Password = ] 'password' ]  
+sp_change_users_login [ @Action = ] 'action'
+    [ , [ @UserNamePattern = ] 'user' ]
+    [ , [ @LoginName = ] 'login' ]
+    [ , [ @Password = ] 'password' ]

@@ -1,14 +1,14 @@
 Param(
 	$Path = ".",
 	$SQLServer = ".\SQLEXPRESS",
-	$SQLDBName = "CC3_local",
-	$uid = "ccwebadmin",
+	$SQLDBName = "Local_DB",
+	$uid = "User",
 	$pwd = "Password",
 	[switch]$showOutput
 )
 # $FolderPath = Get-Location
 # Write-Host "Building srv: $SQLServer  DB: $SQLDBName"
-# foreach ($filename in Get-ChildItem -Path $FolderPath -Filter "*.sql") { 
+# foreach ($filename in Get-ChildItem -Path $FolderPath -Filter "*.sql") {
 #	 Invoke-Sqlcmd -ServerInstance $SQLServer -Database $SQLDBName -InputFile $filename -OutputSqlErrors $true
 # }
 
@@ -29,7 +29,7 @@ function run-ScriptsInFolder {
 
 			if (Test-Path $FolderPath) {
 				write-host "folder: " $FolderPath
-				foreach ($filename in Get-ChildItem -Path $FolderPath -Filter "*.sql") { 
+				foreach ($filename in Get-ChildItem -Path $FolderPath -Filter "*.sql") {
 					Invoke-Sqlcmd -ServerInstance $SQLServer -Database $SQLDBName -InputFile $filename -OutputSqlErrors $true
 					if (!$?) {
 						exit $LASTEXITCODE
@@ -38,7 +38,7 @@ function run-ScriptsInFolder {
 			}
 		}
 	}
-	catch 
+	catch
 	{
 		exit $LASTEXITCODE
 	}
@@ -55,7 +55,7 @@ function run-Create-DB {
 			-Username $uid -Password $pwd -Variable "databasename=$SQLDBName" `
 			-OutputSqlErrors $true -ErrorAction Stop # -Verbose
 	}
-	catch 
+	catch
 	{
 		exit $LASTEXITCODE
 	}
