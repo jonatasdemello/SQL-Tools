@@ -1,0 +1,19 @@
+"---------------- run on DEV ----------------"
+
+CALL variable-test.bat 127.0.0.1 Dev
+
+sqlcmd -S 127.0.0.1 -i "variable-test.sql" -v environment=Dev
+
+{debug} environment: Dev
+do stuff in dev
+
+
+"---------------- run on UAT ----------------"
+
+CALL variable-test.bat 127.0.0.1 Uat
+
+sqlcmd -S 127.0.0.1 -i "variable-test.sql" -v environment=Uat
+
+{debug} environment: Uat
+do other stuff not in dev
+

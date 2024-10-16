@@ -1,29 +1,8 @@
-# Xello CC3_Database
+# Database
 
-## Project to build Xello CC3 Database
+## Project to build Database
 
 References:
-
-> Links on Confluence:
-
-http://confluence.careercruising.com:8090/display/IS/DDL+Scripting+Recipes
-
-http://confluence.careercruising.com:8090/display/DT/SQL+Coding+Standards
-
-
-> More info:
-
-http://confluence.careercruising.com:8090/display/IS/SQL+Joins+Illustration+Diagram
-
-http://confluence.careercruising.com:8090/display/IS/Database+Maintenance
-
-http://confluence.careercruising.com:8090/display/IS/Azure+SQL+Database+Connection+and+Maintenance
-
-
-> Database Identity Seeds:
-
-http://confluence.careercruising.com:8090/display/IS/Database+Identity+Seeds
-
 
 ---------
 # Table of Contents

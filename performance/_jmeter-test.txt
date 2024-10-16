@@ -1,0 +1,135 @@
+Jmeter
+	https://medium.com/@ganeshsirsi/database-performance-and-load-testing-using-jmeter-ms-sql-470045303785
+
+	https://jmeter.apache.org/usermanual/build-db-test-plan.html
+
+
+
+JDBC
+	https://docs.microsoft.com/en-us/sql/connect/jdbc/download-microsoft-jdbc-driver-for-sql-server?view=sql-server-2017
+
+
+
+jdbc:sqlserver://[serverName[\instanceName][:portNumber]][;property=value[;property=value]]
+jdbc:sqlserver://localhost;user=MyUserName;password=*****;
+
+jdbc:sqlserver://database.windows.net;DatabaseName=User
+jdbc:sqlserver://127.0.0.1;DatabaseName=Local_DB_dev
+
+"XelloDbServer": "Server=127.0.0.1;Database=Local_DB_dev;User ID=User;Password=Password"
+
+
+
+Connect to the default database on the local computer by using integrated authentication:
+
+jdbc:sqlserver://localhost;integratedSecurity=true;
+
+Connect to a named database on a remote server:
+
+jdbc:sqlserver://localhost;databaseName=AdventureWorks;integratedSecurity=true;
+
+Connect on the default port to the remote server:
+
+jdbc:sqlserver://localhost:1433;databaseName=AdventureWorks;integratedSecurity=true;
+
+Connect by specifying a customized application name:
+
+jdbc:sqlserver://localhost;databaseName=AdventureWorks;integratedSecurity=true;applicationName=MyApp;
+
+
+
+Database Performance and Load Testing using JMeter (MS SQL)
+
+Performance is important and crucial. When we talk about performance we hear about our website performance most often we try to tune our web pages, CDN and third party plugins. We forget to test our database performance. The database can perform slowly especially when it’s huge. If your website is calling stored procedures or complex queries then it might be taking a lot of time to process your data.
+
+It’s important to know your database performance and load handling capacity. One of the open source tool is JMeter which helps you assess performance.
+
+Please note that I am taking an example of MSSQL Server but you can test any database using JMeter.
+
+Pre-Requisites :
+
+    Java 8
+    JMeter 5.0
+
+Install Java 8 from oracle site : https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+Install JMeter from apache site. https://jmeter.apache.org/download_jmeter.cgi
+
+Unzip .zip to Specific folder
+
+Lets Start from basics
+
+Step 1: Launch the JMeter
+
+Step 2: Add The Tread Group Name it whatever you like (Ex: Database Testing)
+
+Step 3: Add JDBC Connection Configuration to Thread Group
+
+Right Click on The Thread Group , Config Element and Add JDBC Connection Configuration
+
+Step 4: Configure Variable and Max No. of Connections
+
+In the JDBC Connection Configuration, you need to specify all of your database connection configurations.
+
+Give any Variable Name for Created pool (Example test_pool)
+
+Variable Name for Created pool will be used in subsequent SQL query requests so it is important to provide valid name. This variable name uniquely identifies connection pools basically settings you provided in the Configurations.
+
+Max Number of Connections : You can mention any number depending on your need. This value opens specified number of connections in the pool at one time. (Ex: 1)
+
+Step 5: Configure Database connection (Refer above image)
+
+Specify Database URL :
+
+jdbc:sqlserver://<database_serverName>;DatabaseName=<name_of_database>Example : jdbc:sqlserver://database.windows.net;DatabaseName=User
+
+JDBC Driver Class
+
+ com.mircrosoft.sqlserver.jdbc.SQLServerDriver
+
+Enter the UserName and Password.
+
+Step 6: Add the JDBC Request
+
+Right Click on Thread Group (Database Testing in this tutorial) > Add > Sampler > JDBC Request
+
+Now you can choose any statement like Select, Callable etc… from the dropdown.
+
+If you want to get the data to choose select statement or to execute stored procedure choose Callable statement
+
+The JDBC Request looks like below
+
+Step 7: Now Add the Listener View Result Tree
+
+The Complete Test Plan Looks Like below
+
+Step 8: Execute the Testplan
+
+At this point of time it shows error saying “Cannot load JDBC driver class ‘com.microsoft.sqlserver.jdbc.SQLServerDriver”
+
+To fix the above Error Follow the Below steps
+
+    Download the Microsoft JDBC Driver 7.0 for SQL Server
+
+2. Unzip the .exe to specific folder.
+
+3. In the Extracted folder Navigate to \sqljdbc_7.0\enu ,ensure that .jar are available.
+
+4. Now In your JMeter TestPlan browse and choose the .jar
+
+Lets execute the Test plan once again
+
+YAY! you got the result now.
+
+
+# https://jmeter.apache.org/usermanual/build-db-test-plan.html
+
+6.3 Adding a Listener to View/Store the Test Results
+
+The final element you need to add to your Test Plan is a Listener. This element is responsible for storing all of the results of your JDBC requests in a file and presenting the results.
+
+Select the JDBC Users element and add a Summary Report listener (Add → Listener → Summary Report).
+
+Save the test plan, and run the test with the menu Run → Start or Ctrl + R
+
+The listener shows the results.

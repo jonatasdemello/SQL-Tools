@@ -1,0 +1,21 @@
+declare @schema varchar(50), @sproc varchar(200)
+
+SELECT @schema = 'Esignature'
+
+-- dev, test, uat, build
+SELECT TOP (200) T1.ROUTINE_SCHEMA, t1.ROUTINE_NAME as Dev, t2.ROUTINE_NAME as Test ,t3.ROUTINE_NAME as Uat ,t4.ROUTINE_NAME as local
+FROM Local_DB_dev.INFORMATION_SCHEMA.ROUTINES T1
+
+full join Local_DB_test.INFORMATION_SCHEMA.ROUTINES t2  
+    on T1.ROUTINE_SCHEMA = t2.ROUTINE_SCHEMA and t1.ROUTINE_NAME = t2.ROUTINE_NAME 
+
+full join Local_DB_uat.INFORMATION_SCHEMA.ROUTINES t3
+on T1.ROUTINE_SCHEMA = t3.ROUTINE_SCHEMA and t1.ROUTINE_NAME = t3.ROUTINE_NAME 
+
+full join tmp_Local_DB_jm.INFORMATION_SCHEMA.ROUTINES t4
+on T1.ROUTINE_SCHEMA = t4.ROUTINE_SCHEMA and t1.ROUTINE_NAME = t4.ROUTINE_NAME 
+
+where t1.ROUTINE_SCHEMA = @schema or t2.ROUTINE_SCHEMA = @schema or t3.ROUTINE_SCHEMA = @schema
+order by 5,4,3,2-- t1.ROUTINE_NAME
+
+

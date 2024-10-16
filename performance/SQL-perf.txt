@@ -1,0 +1,10 @@
+SQL
+Parameter Sniffing
+
+https://www.brentozar.com/archive/2014/06/tuning-stored-procedures-local-variables-problems/
+
+https://www.brentozar.com/archive/2013/06/optimize-for-unknown-sql-server-parameter-sniffing/
+
+
+https://www.sqlshack.com/query-optimization-techniques-in-sql-server-parameter-sniffing/
+

@@ -1,0 +1,15 @@
+{
+  "name": "automation",
+  "version": "1.0.0",
+  "description": "Sample DB automation",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run db:create",
+    "upgrade": "npm run db:upgrade",
+    "db:create": "pwsh CreateDatabase.ps1 -server 127.0.0.1 -database Local_DB -User sa -Pass P@ssw0rd.2022",
+    "db:upgrade": "pwsh Upgrade.ps1 -server 127.0.0.1 -database Local_DB -User sa -Pass P@ssw0rd.2022",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Xello",
+  "license": "ISC"
+}

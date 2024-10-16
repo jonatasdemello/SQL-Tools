@@ -1,2 +1,4 @@
 # SQL-Tools
-A Collection of SQL useful queries
+
+A Collection of SQL queries functions, scripts and tools.
+

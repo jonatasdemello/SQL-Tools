@@ -1,0 +1,13 @@
+use master
+
+select name from sys.databases where name like 'test%'
+
+DROP DATABASE TEST_94a085600e0a47ceae8abe1addcbd6e0
+
+drop database TEST_0b809f63a11e454e81e6c936959075ed
+drop database TEST_78c821a05fa24b8384fe68eee57bfa81
+drop database TEST_92c9b1efa6e9492f9f3f397305423f70
+drop database TEST_af03418fbb7845838a609c298f1dcb79
+drop database TEST_ddf456766bf44e55908910a5d3484b26
+
+

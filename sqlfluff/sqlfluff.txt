@@ -1,0 +1,23 @@
+Install:
+add to path
+
+%USERPROFILE%\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts
+
+ERROR
+sqlfluff : The term 'sqlfluff' is not recognized as the name of a cmdlet, function, script file, or operable program.
+
+
+pip3 show --files sqlfluff 
+
+
+c:\users\jonatasd\appdata\local\packages\pythonsoftwarefoundation.python.3.10_qbz5n2kfra8p0\localcache\local-packages\python310\site-packages
+
+%USERPROFILE%\AppData\local\packages\pythonsoftwarefoundation.python.3.10_qbz5n2kfra8p0\localcache\local-packages\python310\site-packages
+
+%USERPROFILE%\AppData\Roaming\npm
+
+C:\Users\jonatasd\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts
+%USERPROFILE%\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts
+
+
+
