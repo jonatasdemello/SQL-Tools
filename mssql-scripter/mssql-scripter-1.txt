@@ -1,0 +1,67 @@
+https://www.microsoft.com/en-us/sql-server/blog/2017/05/17/try-new-sql-server-command-line-tools-to-generate-t-sql-scripts-and-monitor-dynamic-management-views/
+
+# Try new SQL Server command line tools to generate T-SQL scripts and monitor Dynamic Management Views
+
+By SQL Server Team 
+
+
+This post was authored by Tara Raj and Vinson Yu, Program Managers – SQL Server Team
+
+We are excited to announce the public preview availability of two new command line tools for SQL Server:
+
+    The mssql-scripter tool enables developers, DBAs, and sysadmins to generate CREATE and INSERT T-SQL scripts for database objects in SQL Server, Azure SQL DB, and Azure SQL DW from the command line.
+    The DBFS tool enables DBAs and sysadmins to monitor SQL Server more easily by exposing live data from SQL Server Dynamic Management Views (DMVs) as virtual files in a virtual directory on Linux operating systems.
+
+Read on for detailed usage examples, try out these new command line tools, and give us your feedback.
+mssql-scripter
+
+Mssql-scripter is the multiplatform command line equivalent of the widely used Generate Scripts Wizard experience in SSMS.
+
+You can use mssql-scripter on Linux, macOS, and Windows to generate data definition language (DDL) and data manipulation language (DML) T-SQL scripts for database objects in SQL Server running anywhere, Azure SQL Database, and Azure SQL Data Warehouse. You can save the generated T-SQL script to a .sql file or pipe it to standard *nix utilities (for example, sed, awk, grep) for further transformations. You can edit the generated script or check it into source control and subsequently execute the script in your existing SQL database deployment processes and DevOps pipelines with standard multiplatform SQL command line tools such as sqlcmd.
+
+Mssql-scripter is built using Python and incorporates the usability principles of the new Azure CLI 2.0 tools. The source code can be found on Github at https://github.com/Microsoft/sql-xplat-cli, and we welcome your contributions and pull requests!
+Get started with mssql-scripter
+
+Install
+$pip install mssql-scripter
+For additional installation tips, visit https://github.com/Microsoft/sql-xplat-cli/blob/dev/doc/installation_guide.md.
+
+Script Your First Database Objects
+For usage and help content, pass in the -h parameter, which will also show all options:
+mssql-scripter -h
+
+Here are some example commands
+# Generate DDL scripts for all database objects (default) in the Adventureworks database and output to stdout
+$ mssql-scripter -S localhost -d AdventureWorks -U sa
+
+# Generate DDL scripts for all database objects and DML scripts (INSERT statements) for all tables in the Adventureworks database and save the script to a file
+$ mssql-scripter -S localhost -d AdventureWorks -U sa ––schema-and-data > ./adventureworks.sql
+
+# generate DDL scripts for objects that contain “Employee” in their name to stdout
+$ mssql-scripter -S localhost -d AdventureWorks -U sa ––include-objects Employee
+
+Get our GitHub usage guide.
+DBFS
+
+A big part of operationalizing SQL Server is to monitor to ensure that SQL Server is performant, highly available, and secure for your applications. With SQL Server 2017, Dynamic Management Views (DMVs) on Windows are also accessible on Linux, allowing your existing scripts and tools that rely on DMVs to continue to work. Traditionally, to get this information, you would use GUI admin tools such as SSMS or command line tools such as SQLCMD to run queries.
+
+Today, we are also introducing a new experimental Linux tool, DBFS, which enables you to access live DMVS mounted to a virtual filesystem using FUSE. All you need to do is view the contents of the virtual files in the mounted virtual directory to see the same data you would see as if you ran a SQL query to view the DMV data. There is no need to log in to the SQL Server using a GUI or command line tool or run SQL queries. DBFS can also be used in scenarios where you want to access DMV data from the context of a script with CLI tools such as grep, awk, and sed.
+
+DBFS uses the FUSE file system module to create two zero byte files for each DMV—one for showing the data in CSV format and one for showing the data in JSON format. When a file is “read,” the relevant information from the corresponding DMV is queried from SQL Server and displayed just like the contents of any CSV or JSON text file.
+
+Features
+
+    Access data in .json format if you are connected to SQL Server 2016 or later
+    Compatible with Bash tools such as grep, sed, and awk
+    Live DMV data at time of access
+    Works with both SQL Server on Windows and SQL Server on Linux
+
+Notes
+
+    This tool is currently only available for Ubuntu, Red Hat, and CentOS (SUSE coming soon!).
+
+Next Steps:
+See more usage examples and read more about mssql-scripter at https://github.com/Microsoft/sql-xplat-cli and get started with the DBFS today at https://github.com/Microsoft/dbfs.
+
+We are open to suggestions, feedback, questions, and of course contributions to the project itself.
+

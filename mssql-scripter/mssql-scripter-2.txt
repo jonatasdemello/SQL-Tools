@@ -1,0 +1,112 @@
+
+How to install & configure MSSQL-Scripter & Python
+
+This document is provided “as-is”. Information and views expressed in this document, including URL and other
+Internet Web site references, may change without notice.
+Some examples depicted herein are provided for illustration only and are fictitious. No real association or
+connection is intended or should be inferred.
+This document does not provide you with any legal rights to any intellectual property in any Microsoft product.
+You may copy and use this document for your internal, reference purposes.
+© 2018 Microsoft. All rights reserved.
+
+1. Pre-Requisites
+• Python 3.6
+• mssql-scripter
+• Windows PowerShell – Version 5 or superior
+• Azure subscription
+
+2. Guidelines on products installation
+
+2.1 How to install Python on Windows 10
+a) Visit the official Python download page and grab the Windows installer for the latest version
+of Python 3. A couple of notes:
+- Python is currently available in two versions — Python 2 and Python 3. For beginners, that
+can be confusing. In short, Python 3 is where the language is going; Python 2 has a large
+base of existing users but isn’t developing beyond bug fixes. Read this for more.
+https://www.python.org/downloads/
+- By default, the installer provides the 32-bit version. There’s also a 64-bit version available. I
+recommend you stick with the 32-bit version
+b) Run the installer. You’ll have two options — choose “Customize Installation.”
+c) On the next screen, check all boxes under “Optional Features.” Click next.
+d) Next, under “Advanced Options,” set the location where you want to install Python. For ease, I use:
+C:\Python36-32
+
+That refers to an installation of 32-bit Python 3.6
+e) Next, set the system’s PATH variable to include directories that include Python components
+and packages we’ll add later. To do this:
+-
+Open the Control Panel (easy way: click in the Windows search on your task bar and type
+“Control Panel” then click the icon).
+-
+In the Control Panel, search for Environment; click Edit the System Environment Variables.
+Then click the Environment Variables button.
+-
+In the User Variables section, we will need to either edit an existing PATH variable or create
+one. If you are creating one, make PATH the variable name and add the following directories
+to the variable values section as shown, separated by a semicolon. If you’re editing an
+existing PATH, the values are presented on separate lines in the edit dialog. Click New and
+add one directory per line.
+C:\Python36-32
+C:\Python36-32\Lib\site-packages\
+C:\Python36-32\Scripts\
+f) Go back to the Python install and finish the installation
+g) Now, you can open a command prompt (Start Menu | Windows System | Command
+Prompt) and type:
+Python
+That will load Python interpreter:
+
+2.2 How to install MSSQL-SCRIPTER on Windows 10
+a) To Install mssql-scripter, you should run:
+pip install mssql-scripter
+b) Guidelines on how to install it in MacOS and Linux:
+https://github.com/Microsoft/sql-xplat-cli/blob/dev/doc/installation_guide.md
+
+2.3 How to install PowerShell on Windows 10
+You probably will have PowerShell installed if you are running Windows 10.
+In case this is missing for some reason, please find below guidelines on how to install it.
+
+https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-windows-
+powershell?view=powershell-5.1
+a) Recommendation:
+- Go to search on windows and type PowerShell
+- Pin to taskbar
+
+3. How to run Schema Deployment PowerShell scripts
+Pre-Requisite: Please download folder enMasse_schemadeployment
+https://microsoft.sharepoint.com/teams/sqlaa/jumpstart/Shared%20Documents/Forms/AllItems.aspx?view
+path=%2Fteams%2Fsqlaa%2Fjumpstart%2FShared%20Documents%2FForms%2FAllItems%2Easpx&id
+=%2Fteams%2Fsqlaa%2Fjumpstart%2FShared%20Documents%2FJumpstart%2DArtifacts%2FIP%2FC
+apita%20Group%20%2D%20EMEA%20%2D%20UK
+a) Fire up PowerShell as administrator
+b) Connect to your Azure subscription:
+Run:
+Login-AzureRmAccount
+It will open a pop window. You need to enter credentials for the Azure Subscription:
+c) Run PowerShell to prepare empty databases:
+In order to prepare the environment, three scripts should be run:
+--- preparing environment
+& "C:\MyPS\create_rg.ps1"
+& "C:\MyPS\create_sqlserver.ps1"
+& "C:\MyPS\create_sqldb.ps1"
+Optional:
+--- add databases to elastic pool. This can be done after the schema is deployed.
+
+& "C:\MyPS\add_elastic.ps1"
+d) Run PowerShell to export DDLs from source databases:
+---- generate
+& "C:\MyPS\schema_generator.ps1"
+e) Run PowerShell to deploy DDLs to target databases:
+---- schema deployment
+& "C:\MyPS\schema_deploy.ps1"
+4. How to undo
+f) Delete resource group from the subscription
+---- delete the resource group
+& "C:\MyPS\remove_rg.ps1"
+
+
+Feedback and suggestions
+If you have feedback or suggestions for improving this data migration asset, please contact the Data
+Migration Jumpstart Team (askdmjfordmtools@microsoft.com). Thanks for your support!
+Note: For additional information about migrating various source databases to Azure, see the Azure
+Database Migration Guide.
+

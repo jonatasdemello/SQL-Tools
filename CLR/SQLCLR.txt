@@ -1,0 +1,35 @@
+SQL.CLR
+
+https://sqlquantumleap.com/2017/08/07/sqlclr-vs-sql-server-2017-part-1-clr-strict-security/
+
+https://www.sqlservercentral.com/stairways/stairway-to-sqlclr
+
+
+SqlQuantumLeap/BinaryFormatter: Format binary file into hex string file
+SQLCLR vs. SQL Server 2017, Part 1: “CLR strict security” – The Problem – Sql Quantum Leap
+SQLCLR vs. SQL Server 2017, Part 2: “CLR strict security” – Solution 1 – Sql Quantum Leap
+SQLCLR vs. SQL Server 2017, Part 3: “CLR strict security” – Solution 2 – Sql Quantum Leap
+SQLCLR vs. SQL Server 2017, Part 4: “Trusted Assemblies” – The Disappointment (Msg 10314) – Sql Quantum Leap
+SQLCLR vs. SQL Server 2017, Part 5: “Trusted Assemblies” – Valid Use Cases? – Sql Quantum Leap
+SQLCLR vs. SQL Server 2017, Part 6: “Trusted Assemblies” – Whitelisted Assemblies can’t do Module Signing – Sql Quantum Leap
+SQLCLR vs. SQL Server 2012 & 2014 & 2016, Part 7: “CLR strict security” – The Problem Continues … in the Past (Wait, What?!?) – Sql Quantum Leap
+SQLCLR vs SQL Server 2017, Part 8: Is SQLCLR Deprecated in Favor of Python or R (sp_execute_external_script)? – Sql Quantum Leap
+CLR strict security - SQL Server | Microsoft Learn
+Deprecated Database Engine features - SQL Server 2017 | Microsoft Learn
+Extended Stored Procedures Programmer's Reference - SQL Server | Microsoft Learn
+Common Language Runtime (CLR) Overview - SQL Server | Microsoft Learn
+Solomon Rutzky, Author at SQLServerCentral
+Stairway to SQLCLR – SQLServerCentral
+Stairway to SQLCLR Level 1: What is SQLCLR? – SQLServerCentral
+Stairway to SQLCLR Level 3: Security (General and SAFE Assemblies) – SQLServerCentral
+Stairway to SQLCLR Level 4: Security (EXTERNAL and UNSAFE Assemblies) – SQLServerCentral
+Stairway to SQLCLR Level 5: Development (Using .NET within SQL Server) – SQLServerCentral
+Stairway to SQLCLR Level 6: Development Tools Intro – SQLServerCentral
+Stairway to SQLCLR Level 7: Development and Security – SQLServerCentral
+Stairway to SQLCLR Level 8: Using Visual Studio to Work around SSDT – SQLServerCentral
+SQL# (SQLsharp) - Expanding the capabilities of T-SQL via SQLCLR
+SQL# (SQLsharp) - Expanding the capabilities of T-SQL via SQLCLR (Features)
+Sql Quantum Leap :: About
+Sql Quantum Leap :: Articles 
+
+

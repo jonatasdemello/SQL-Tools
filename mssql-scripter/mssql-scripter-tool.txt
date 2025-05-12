@@ -1,0 +1,144 @@
+https://www.sqlshack.com/all-about-mssql-scripter-the-sql-server-cross-platform-scripting-tool/
+
+SQLShack
+
+# All about MSSQL-Scripter, the SQL Server cross-platform scripting Tool
+
+August 14, 2018 by Prashanth Jayaram
+
+One of the major challenges we face today, in the software development lifecycle, is with respect to development and deployment. As applications are deployed by moving various pieces of the SQL code between several versions, configuration, different editions, and sometimes even different platforms, deployment becomes daunting. In my opinion, scripting helps a lot and can really “grease the wheels” with addressing many scenarios that involve such complexity.
+
+The importance of database level scripting is high, but it is getting easier by the day. Scripting is a process of generating a text file that contains the data structures and data from the database objects.
+
+So, do we have a SQL native tool which serves the various purposes and usage? In some cases, the answer’s a yes, and in others, it’s a no.
+
+Database object scripting can be done in many several ways such as:
+
+    Generate script wizard
+    T-SQL
+    PowerShell
+    Mssql-scripter
+    Third party tools 
+
+This article is all about using mssql-scripter for the task, and its simple capabilities to script the objects on a cross-platform SQL Servers.
+
+In this article, we talk about:
+
+    Mssql-scripter on Windows
+    Mssql-scripter on Linux 
+
+Background
+
+Microsoft recent announcement on SQL tool; a command line utility, DBFS and mssql-scripter, serves two different data management functions. In a previous article, Continuous Database Delivery (CD) using SQL Server Tools SqlPackage.exe, we saw how to use DBFS tools. This article is an effort to state how Python has become a more user-friendly DBA toolset, with emphasis on the next-generation database administrators. It’s all about thinking beyond the boundaries of traditional DBAs; one needs to know and understand the contemporary toolset to work on cross-platform systems.
+Introduction
+
+mssql-scripter is an open-source cross-platform command line tool. This command-line tool is used for scripting SQL Server database objects and data. It’s almost similar to the Generate Scripts Wizard in SSMS with a wide range of options.
+
+mssql-scripter is a flexible tool which lets you generate .sql files that work anywhere including on-premises SQL Server, or on Azure. These SQL files can be T-SQL scripts; data definition language or data manipulation language. These files can also be piped to standard UNIX/Linux tools such as grep or awk or sed, to help with further manipulation.
+
+These scripts can even be source-controlled. These scripts can be used with DevOps deployments as well, apart from SQL Database or Warehouse. That also means that the scripts are compatible with several other cross-platform CLI tools such as sqlcmd.
+
+What’s notable here is that Python is necessary for the setup to work. Most SQL DBAs may have the question ‘Why this can’t be done using PowerShell?’ I had the same mindset as well. The reason I think, is that Python is growing in popularity under the umbrella of DevOps. Another reason is the strong language processing available in Unix/Linux commands; several powerful toolset provides various ways to get the required result.
+Pre-requisites
+
+Install Python – The recent versions of Python include pip by default. To Install Python on Windows
+
+    Download the Python library from the download page.
+
+    Right click the Python executable, and choose the Run as administrator option.
+
+    Before selecting the Install now option, enable the Add Python 3.6 to PATH. This will update the environment variable. If you miss step, you may need it manually set the environment variable.
+
+    Watch the status of the setup in the installation screen. The installation should go through without a glitch in most cases.
+
+That’s all!
+pip
+
+This section discusses the installation and configuration of mssql-scripter. Before jumping into that, I would like to highlight some of the basics of the Python Package Management Programs.
+
+What is pip?
+
+pip is a package management system used to install and manage software packages, such as those found in the Python Package Index. A package installs the packages default under site-packages.
+
+pip command has several options to install and validate the package installation process. Let’s see various pip command options:
+C:\Users\ccov648>pip --help
+
+Install the mssql-scripter package
+C:\Users\ccov648>pip install mssql-scripter
+
+List information about the installed packages
+C:\Users\ccov648>pip list --format columns
+
+Show information about a package:
+C:\Users\ccov648>pip show mssql-scripter
+
+Show all information about a package:
+
+Demo
+
+Let us take a look at some scenarios on Windows and Linux
+
+mssql-scripter on Windows
+
+After performing all the above steps, the mssql-scripter is ready to use. The -h parameter of mssql-scripter provides a wide range of options. Please take a few minutes to understand the list of the parameters.
+C:\Users\ccov648>mssql-scripter -h
+
+-h is the help switch that details all the available options used with the mssql-scripter command.
+
+How to Connect to Linux SQL instance from Windows
+C:\Users\ccov648>mssql-scripter -S 10.2.6.51 -U sa -P thanVitha@2015 -d SQLShack --schema-and-data > C:\Linux-schema-and-data.sql
+
+
+How to Exclude database object from output file
+
+For the demo, I’ve created two files: One with name test and the other, SQLShack, to generate DDL scripts of those objects that do not contain ‘test’ as their name. For this, use the –exclude-objects parameter with mssql-scripter.
+C:\Users\ccov648>mssql-scripter -S 10.2.6.51 -U sa -P thanVitha@2015  --exclude-objects test -d SQLShack > c:\Linux.sql
+
+Mssql-scripter on Linux
+
+To configure mssql-scripter on a Linux distribution, CentOS/RHEL follow these steps.
+
+To install Python-Pip using yum
+# su
+# yum install python-pip python-wheel
+
+Now, Pip is available for the mssql-scripter package management.
+
+Install mssql-scripter package using pip:
+#pip install mssql-scripter
+
+Update the Python setup tools.
+#yum upgrade python-setuptools
+
+Run the mssql-scripter command.
+#mssql-scripter -h
+
+How to Connect SQL Server instance on Windows from Linux server
+#mssql-scripter –S <ServerName> -U sa –P <Pwd> -d powerSQL --include-schemas >/home/thanvitha/PowerSQL.sql
+
+How to project a subset of the table data using single input pattern
+
+In the following example, the DSSPUSER data is projected into the SQL file.
+#mssql-scripter –S <ServerName> -U sa –P <Pwd> -d powerSQL --include-objects dbo.dssp_log_trail --data-only | grep “DSSPUSER”>/home/thanvitha/PowerSQL_1.sql
+
+How to project a subset of the table data using multiple patterns of input
+
+In the following example, the DSSPUSER data is projected into the SQL file.
+#mssql-scripter –S <ServerName> -U sa –P <Pwd> -d powerSQL --include-objects dbo.genp_log_trail --data-only | grep "DSSPUSER\|OWUSER\|JDE">/home/thanvitha/PowerSQL_2.sql
+
+How to prepare the login script using search patterns
+
+The grep command is used to filter out the objects that contain “create login” in the standard output.
+#mssql-scripter –S <ServerName> -U sa –P <Pwd> --logins | grep "CREATE LOGIN" >/home/thanvitha/logins.sql
+
+Wrapping up
+
+In this article, conducted a walk-through of the installation and configuration of the mssql-scripter tool on Windows and Linux platforms.
+
+For a typical development, testing, and release management environment, scripting is a vital part of the job.
+
+Not every solution works for every scenario, when it comes to programming techniques, scripting techniques, or tools. But mssql-scripter certainly seems promising in many cases since this tool is compatible with multiple platforms, and contains a wide range of parameters.
+
+There may be some limitations to scripting in some cases, which need to be checked and tested on large databases.
+
+Tell us what you think by posting your comments below! 
